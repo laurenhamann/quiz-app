@@ -1,0 +1,63 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+
+
+
+/*class for the div*/
+
+.center-dot{
+	position:absolute;
+	top:50%;
+	left:50%;
+}
+
+.allDots{
+	display:flex;
+	flex-wrap: wrap;
+	flex-direction: column;
+}
+
+/*rid the spacing between dots*/
+p{
+	margin: 0;
+	font-size: 64px;
+	line-height: 20%;
+}
+/*Blinking Animation*/
+
+
+@keyframes circleBlinking {
+	0% {
+		opacity:1;
+	}
+	25% {
+		opacity:0;
+	}
+	50% {
+		opacity:1;
+	}
+	75% {
+		opacity:0;
+	}
+	100% {
+		opacity:1;
+	}
+}
+
+.blink-animation{
+   	animation-name: circleBlinking;
+   	animation-duration: 1s;
+   	animation-iteration-count: infinite;
+}
