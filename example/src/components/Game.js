@@ -1,7 +1,8 @@
 import React from 'react';
-import DotList from './DotList';
+import Grid from './Grid';
+import Header from './Header';
 
-class Board extends React.Component{
+class Game extends React.Component{
 	constructor(props){
 		super(props);
 		this.state = {
@@ -30,6 +31,11 @@ class Board extends React.Component{
 		this.setState({game: true});
 	}
 
+	// handleFontScale() {
+
+	// }
+
+
 
 
 	render(){
@@ -40,10 +46,7 @@ class Board extends React.Component{
 		const width = {
 			width: this.state.width
 		};
-		const divSize = {
-			Width: this.state.width,
-			Height: this.state.height
-		};
+
 
 		const gameStarted = this.state.game;
 
@@ -51,7 +54,10 @@ class Board extends React.Component{
 			
 
 			{gameStarted ? (
-				<DotList  height={height} width={width}/> 
+				<React.Fragment>
+					<Header />
+					<Grid /> 
+				</React.Fragment>
 			) : (
 				
 				<button onClick={this.handleClick}>
@@ -66,4 +72,4 @@ class Board extends React.Component{
 
 
 
-export default Board;
+export default Game;

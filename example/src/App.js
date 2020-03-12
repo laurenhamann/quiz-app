@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Board from './components/Board';
-import OptionsBar from './components/Aside';
-import TopBar from './components/TopBar';
+import Game from './components/Game';
+
 
 class App extends Component {
   constructor(props){
@@ -20,7 +19,7 @@ class App extends Component {
   render() {
     return (
       <div>      
-         <Board />
+         <Game />
       </div>
     );
   }

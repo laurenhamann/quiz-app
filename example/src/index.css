@@ -14,7 +14,52 @@ code {
 
 
 
+/*TOP BAR STYLING*/
+.TopBar{
+	display:flex;
+	flex-direction: column;
+}
 
+.lgRow {
+	display:flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.Buttons{
+	display:flex;
+	flex-direction: column;
+}
+
+.lgButtons{
+	display:flex;
+	flex-direction: row;
+	margin-right: 5%;
+}
+
+
+.undo, 
+.redo{
+	padding-right:1%;
+	border:none;
+}
+
+.undo:hover,
+.redo:hover{
+	font-weight: bold;
+}
+
+.title{
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 0px;
+}
+
+/*STYLE BAR*/
+.style-bar{
+	width:10%;
+	float:left;
+}
 /*class for the div*/
 
 .center-dot{
