@@ -6,25 +6,24 @@ class StyleBar extends React.Component{
 		this.state={
 			display: false,
 			color: '#000',
-			size: '12px',
+			size: '64px',
 			shape: '.',
 			spacing: '1px'
 		}
-		this.handleChange = this.handleChange.bind(this);
+		//this.handleChange = this.handleChange.bind(this);
 		this.handleOnClick = this.handleOnClick.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
-	handleChange(event) {
-		this.setState({color: event.target.value});
-	}
+	// handleChange(event) {
+	// 	this.setState({color: event.target.color});
+	// }
 
 	handleOnClick(event){
 		this.setState({display: !this.state.display});
 	}
 
 	handleSubmit(event){
-		alert('A color was submitted: ' + this.state.color);
 		event.preventDefault();
 	}
 
@@ -40,9 +39,12 @@ class StyleBar extends React.Component{
 					<form style={this.state.display ? {display: "block", width: "10%"} : {display: "none"}} onSubmit={this.handleSubmit}>
 						<label>
 						Color:
-							<input type="text" value={this.state.color} onChange={this.handleChange} />
+							<input type="text" defaultValue={this.state.color} onChange={this.props.triggerColorChange} />
 						</label>
-														<input type="submit" className="submit" value="Ok" />
+						<label className="sizeStyle">
+						Size:
+							<button name="sub" className="subtractBtn" onClick={this.props.triggerSizeChange}> - </button> {this.props.size} <button name="add" className="additionBtn" onClick={this.props.triggerSizeChange}>+</button>
+						</label>
 					</form>
 
 				</aside>

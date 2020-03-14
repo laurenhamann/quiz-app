@@ -2,7 +2,6 @@ import React from 'react';
 import DotList from './DotList';
 
 
-
 class Grid extends React.Component{
 	constructor(props){
 		super(props);

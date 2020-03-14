@@ -1,5 +1,4 @@
 import React from 'react';
-import StyleBar from './StyleBar';
 
 class DotList extends React.Component {
 	constructor(props){
@@ -19,6 +18,7 @@ class DotList extends React.Component {
 				}
 			]
 		}
+		this.handleDotChange = this.handleDotChange.bind(this);
 		this.boundaries = this.boundaries.bind(this);
 		this.getDotPosition = this.getDotPosition.bind(this);
 		this.bottomBarrier = this.bottomBarrier.bind(this);
@@ -52,6 +52,8 @@ class DotList extends React.Component {
 						id:this.prevDotId += 1,
 						animation: true,
 						text: ".",
+						color: this.props.color,
+						size: this.props.size,
 						position: [parseInt(this.d.style.top),
 								parseInt(this.d.style.left)
 							],
@@ -62,14 +64,18 @@ class DotList extends React.Component {
 			};
 		});
         	
-        
+        console.log('it worked');
 		this.getDotPosition();
 		this.boundaries();
+		this.handleDotChange();
+
 	}
-
-	
     
+	handleDotChange(){
+		this.d.style.color = "#" + this.props.color;
+		this.d.style.fontSize = this.props.size + 'px';
 
+	}
 	
  	getDotPosition() {
  		this.d = this.dotRef.current;
@@ -217,6 +223,7 @@ class DotList extends React.Component {
 	}
 
 	render() {
+
 		
 		this.dotStartTop = window.innerHeight * 0.2;
 
@@ -226,14 +233,15 @@ class DotList extends React.Component {
 			   key={index} 
 			   id={index} 
 			   className={dot.animation ? 'blink-animation' : 'dot'}
-			   style={{position: "absolute", left: "0px", top: this.dotStartTop + 'px', display: "inlineBlock"}}> 
-			   	{dot.text} 
+			   style={{position: "absolute", left: "0px", top: this.dotStartTop + 'px', display: "inlineBlock"}}
+			   onChange={this.handleDotChange}> 
+			   	{dot.text}
 			</p>
 		);
+		//this.handleDotChange();
 		return (
 			<React.Fragment>
 				{allDots}
-			    
 			</React.Fragment>
 		 );
 

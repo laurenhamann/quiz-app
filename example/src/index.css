@@ -57,8 +57,23 @@ code {
 
 /*STYLE BAR*/
 .style-bar{
-	width:10%;
+	/*width:10%;*/
 	float:left;
+	background-color: #eee
+}
+
+/*style for label button sizing*/
+
+.sizeStyle{
+	display:flex;
+	flex-direction: row;
+	margin:3px;
+}
+
+
+.subtractBtn, .additionBtn {
+	margin-left: 8px;
+	margin-right: 8px;
 }
 /*class for the div*/
 
@@ -73,6 +88,7 @@ code {
 	flex-wrap: wrap;
 	flex-direction: column;
 }
+
 
 /*rid the spacing between dots*/
 p{
