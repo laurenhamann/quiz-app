@@ -45,6 +45,10 @@ class StyleBar extends React.Component{
 						Size:
 							<button name="sub" className="subtractBtn" onClick={this.props.triggerSizeChange}> - </button> {this.props.size} <button name="add" className="additionBtn" onClick={this.props.triggerSizeChange}>+</button>
 						</label>
+						<label className="spaceStyle">
+						Spacing:
+							<button name="subSpace" className="subtractBtn" onClick={this.props.triggerSpaceChange}> - </button> {this.props.space} <button name="addSpace" className="additionBtn" onClick={this.props.triggerSpaceChange}>+</button>
+						</label>
 					</form>
 
 				</aside>

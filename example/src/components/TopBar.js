@@ -1,11 +1,9 @@
 import React from 'react';
-import StyleBar from './StyleBar';
 
 
 
 function TopBar(props){
 	const headerHeight = window.innerHeight * 0.1;
-	const windowWidth = window.innerWidth;
 		return(
 			<header className={window.innerWidth > 700 ? "lgRow" : "TopBar"} style={{height: headerHeight + 'px'}}> 
 			

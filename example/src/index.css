@@ -64,7 +64,7 @@ code {
 
 /*style for label button sizing*/
 
-.sizeStyle{
+.sizeStyle, .spaceStyle{
 	display:flex;
 	flex-direction: row;
 	margin:3px;
