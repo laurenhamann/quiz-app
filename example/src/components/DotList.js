@@ -92,14 +92,9 @@ class DotList extends React.Component {
 		this.d.style.fontSize = this.props.size + 'px';
 		this.prevSize = parseInt(this.prevNode.style.fontSize);
 		this.fontSize = parseInt(this.d.style.fontSize);
-		this.dotHeight = this.d.offsetHeight;
-		this.prevHeight = this.prevNode.offsetHeight;
 		this.curve = -0.115384615384615;
 		this.curveSec = -0.393076923076923;
-		this.dotSpace = this.props.space;
-		this.prevDotSpace = this.props.prevSpace;
- 		this.moveSpaceing = this.dotHeight + this.dotSpace;
-
+ 		alert(this.dotHeight);
 	
 // Curving DOT WHEN FONT SIZE INCREASES
 		if(this.fontSize > this.prevSize){
@@ -187,6 +182,11 @@ class DotList extends React.Component {
  		this.d = this.dotRef.current;
  		this.dotPos = this.d.getBoundingClientRect();
  		this.prevNode = this.d.previousSibling;
+ 		this.dotHeight = this.d.offsetHeight;
+		this.prevHeight = this.prevNode.offsetHeight;
+		this.dotSpace = this.props.space;
+		this.prevDotSpace = this.props.prevSpace;
+ 		this.moveSpaceing = this.dotHeight + this.dotSpace;
  		this.htTripled = this.dotHeight * 3;		
  	}
 
@@ -277,7 +277,7 @@ class DotList extends React.Component {
 
 //MOVEMENT FOR LEFT KEY PRESS
 	leftArrowPressed() {
-		this.moveLeft = parseInt(this.d.style.left) - this.moveSpaceing + 'px';
+		this.moveLeft = parseFloat(this.d.style.left) - this.moveSpaceing + 'px';
 		this.d.style.left = this.moveLeft;
 		if(parseInt(this.d.style.left) < 0 ){
 			this.d.style.left = 0 + 'px';
@@ -286,7 +286,7 @@ class DotList extends React.Component {
 
 //MOVEMENT FOR RIGHT KEY PRESS
 	rightArrowPressed() {
-		this.moveRight = parseInt(this.d.style.left) + this.moveSpaceing + 'px';
+		this.moveRight = parseFloat(this.d.style.left) + this.moveSpaceing + 'px';
 		this.d.style.left = this.moveRight;
 		alert(this.moveRight);
 		if(parseInt(this.d.style.left) > this.rightBoundary ){
@@ -367,10 +367,9 @@ class DotList extends React.Component {
 			   id={index} 
 			   className={dot.animation ? 'blink-animation' : 'dot'}
 			   style={{position: "absolute", left: "0px", top: this.dotStartTop + 'px', display: "inlineBlock"}}> 
-			   	{dot.text}
+			    {dot.text}
 			</p>
 		);
-
 
 		return (
 			<React.Fragment>
