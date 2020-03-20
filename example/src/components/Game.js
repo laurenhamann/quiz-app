@@ -16,6 +16,7 @@ class Game extends React.Component{
 			space: 1,
 			prevSpace: 1,
 			text: "&#8226;",
+			display: false,
 			palette:[]
 		};
 		this.handleClickSaveColor = this.handleClickSaveColor.bind(this);
@@ -26,6 +27,7 @@ class Game extends React.Component{
 		this.handleColorChange = this.handleColorChange.bind(this);
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
 		this.handleClick = this.handleClick.bind(this);
+		this.handleOpenOnClick = this.handleOpenOnClick.bind(this);
 	}
 	componentDidMount() {
 		this.updateWindowDimensions();
@@ -81,6 +83,10 @@ class Game extends React.Component{
 		}
 	}
 
+	handleOpenOnClick(event){
+		this.setState({display: !this.state.display});
+	}
+
 	handleShapeChange(event){
 		this.setState({text: event.target.value});
 	}
@@ -131,8 +137,12 @@ class Game extends React.Component{
 						space={newSpace}
 						color={newColor}
 						palette={palette}
-						text={this.props.text} />
-						<TopBar />
+						handleOnClick={this.handleOpenOnClick}
+						display={this.state.display}
+						text={this.props.text}
+						 />
+						<TopBar 
+						style={this.state.display === true ? {width: "50%"} : {width: "10%"}}/>
 					</div>
 					<DotList 
 						color={newColor}

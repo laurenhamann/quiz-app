@@ -26,27 +26,14 @@ class DotList extends React.Component {
 			hitBottom: false,
 			hitRight: false,
 			hitTop: false,
-			hitLeft: false
+			hitLeft: false,
+			left: false,
+			right: false,
+			top: false,
+			bottom: false
 		}
 		this.handleDotChange = this.handleDotChange.bind(this);
-		this.boundaries = this.boundaries.bind(this);
-		this.getDotPosition = this.getDotPosition.bind(this);
-		this.bottomBarrier = this.bottomBarrier.bind(this);
-		this.rightBarrier = this.rightBarrier.bind(this);
-		this.leftBarrier = this.leftBarrier.bind(this);
 		this.moveDot = this.moveDot.bind(this);
-		this.leftArrowPressed = this.leftArrowPressed.bind(this);
-		this.rightArrowPressed = this.rightArrowPressed.bind(this);
-		this.upArrowPressed = this.upArrowPressed.bind(this);
-		this.downArrowPressed = this.downArrowPressed.bind(this);
-		this.enterPressed = this.enterPressed.bind(this);
-		this.curveLeft = this.curveLeft.bind(this);
-		this.curveUp = this.curveUp.bind(this);
-		this.curveDown = this.curveDown.bind(this);
-		this.curveRight = this.curveRight.bind(this);
-		this.updatePosition = this.updatePosition.bind(this);
-		this.topBarrier = this.topBarrier.bind(this);
-
 	}
 
 	componentDidMount() {
@@ -97,11 +84,14 @@ class DotList extends React.Component {
 //CHANGES FROM THE PARENT COMPONENT FOR CURRENT DOT    
 	handleDotChange(){
 		this.d.style.color = this.props.color;
+		this.d.style.fontSize = this.props.size + 'px';
+		this.d.innerHTML = this.props.text;
 		this.prevSize = parseFloat(this.prevNode.style.fontSize);
 		this.fontSize = parseFloat(this.d.style.fontSize);
 		this.curve = -0.115384615384615;
 		this.curveSec = -0.393076923076923;
-	
+		this.dotWidth = this.d.offsetWidth;
+		this.moveSpaceing = this.dotWidth + this.dotSpace;
 // Curving DOT WHEN FONT SIZE INCREASES
 		if(this.fontSize > this.prevSize){
 			if(this.state.movingLeft && this.state.movingUp && this.state.movingRight && this.state.movingDown === true){
@@ -118,7 +108,7 @@ class DotList extends React.Component {
 			}else if(this.state.movingDown === true){
 	//MOVES DOT OVER WHEN MOVING DOWN
 				this.curveLeft();
-				this.curveUp();
+				this.curveDown();
 		//this.d.style.left = parseInt(this.d.style.left) - 0.3028 + 'px';
 			}
 		}
@@ -181,61 +171,61 @@ class DotList extends React.Component {
 		}
 	}
 
-	updatePosition(){
+	updatePosition = () => {
 		this.screenHeight = window.innerHeight;
 		this.screenWidth = window.innerWidth;
 		this.leftPosition = parseFloat(this.d.style.left);
 
 		this.topPosition = parseFloat(this.d.style.top);
-
-		this.getDotPosition();
-
 	}
 
 
 //GETTING THE CURRENT DOT POSITIONING AND SETTING TO REUSABLE VARIABLES	
- 	getDotPosition() {
+ 	getDotPosition = () => {
  		this.d = this.dotRef.current;
  		this.dotPos = this.d.getBoundingClientRect();
  		this.prevNode = this.d.previousSibling;
  		this.dotHeight = this.d.offsetHeight;
 		this.prevHeight = this.prevNode.offsetHeight;
-		this.dotWidth = this.d.offsetWidth;
+		this.dotWidth = parseFloat(this.d.offsetWidth);
 		this.dotSpace = this.props.space;
 		this.prevDotSpace = this.props.prevSpace;
- 		this.moveSpaceing = this.dotWidth + this.dotSpace;
- 		this.widthDoubled = this.dotWidth * 2;	
+ 		this.widthDoubled = this.dotWidth * 2;
+ 		console.log(this.dotWidth);	
+ 		console.log(this.moveSpaceing);
  	}
 
- 	curveLeft(){
+ 	curveLeft = () => {
  		this.newCurveLeft = parseFloat(this.d.style.left) + (this.curve) + 'px';
 		this.d.style.left = this.newCurveLeft;
  	}
 
- 	curveUp(){
- 		this.newCurveUp = parseFloat(this.d.style.top) + (this.curveSec) + 'px';
-		this.d.style.top = this.newCurveUp;
+ 	curveDown = () =>{
+
+ 		this.newCurveDown = parseFloat(this.d.style.top) + (this.curve) + 'px';
+		this.d.style.top = this.newCurveDown;
+		this.styleBarrier = parseFloat(this.d.style.top) - parseFloat(this.prevNode.style.top);
  	}
 
- 	curveDown(){
- 		this.newCurveDown = parseFloat(this.d.style.top) - (this.curveSec) + 'px';
+ 	curveUp = () => {
+ 		this.newCurveDown = parseFloat(this.d.style.top) - (this.curve) + 'px';
 		this.d.style.top = this.newCurveDown;
  	}
 
- 	curveRight(){
+ 	curveRight = () => {
  		this.newCurveRight = parseFloat(this.d.style.left) - (this.curve) + 'px';
 		this.d.style.left = this.newCurveRight;
  	}
  	
 //MOVING THE DOT AROUND THE BOTTOM PORTION OF THE SCREEN
- 	bottomBarrier(){
+ 	movingRight = () =>{
  		this.d.style.top = this.prevNode.style.top;
 		this.d.style.left = parseFloat(this.prevNode.style.left) + this.moveSpaceing + 'px';
 		this.setState({movingRight: true});
  	}
 
 //MOVING THE DOT UP THE LEFT SIDE OF SCREEN 	
- 	leftBarrier(){
+ 	movingDown = () => {
  		this.d.style.top = parseFloat(this.prevNode.style.top) + this.moveSpaceing + 'px';
 		this.d.style.left = this.prevNode.style.left;
 		//Making the width of this element be the same as the height
@@ -243,14 +233,14 @@ class DotList extends React.Component {
  	}
 
 //MOVING THE DOT UP THE RIGHT SIDE OF SCREEN
- 	rightBarrier() {
+ 	movingUp = () => {
  		this.d.style.left = this.prevNode.style.left;
 		this.d.style.top = parseFloat(this.prevNode.style.top) - this.moveSpaceing + 'px';
 		this.negativeSpaceing = this.moveSpaceing * (-1);
 		this.setState({movingUp: true});
  	}
 
- 	topBarrier(){
+ 	movingLeft = () => {
 		this.d.style.top = this.prevNode.style.top;
 		this.d.style.left = parseFloat(this.prevNode.style.left) - this.moveSpaceing + 'px';
 		this.setState({movingLeft: true});
@@ -258,7 +248,7 @@ class DotList extends React.Component {
 
 
 //THE BOUNDARIES FUNCTION FOR THE SCREEN SIZE
-	boundaries(props) {
+	boundaries = () => {
 			if(this.topPosition >= this.bottomBounds && this.leftPosition <= this.leftBounds){
 				this.setState({hitLeft: false});
 				this.setState({hitBottom: true});
@@ -276,49 +266,79 @@ class DotList extends React.Component {
 			}
 
 			if(this.state.hitBottom === true){
-				this.bottomBarrier();
+				this.movingRight();
 			}else if (this.state.hitRight === true){
-				this.rightBarrier();
+				this.movingUp();
 			}else if (this.state.hitTop === true){
-				this.topBarrier();
+				this.movingLeft();
 			}else if (this.state.hitLeft === true){
-				this.leftBarrier();
+				this.movingDown();
 			}else{
-				this.leftBarrier();
+				this.movingDown();
 			}
 	}
 
+	contDirection = () => {
+		if(this.state.left === true){
+			this.movingLeft();
+		}else if(this.state.right === true){
+			this.movingRight();
+		}else if(this.state.up === true){
+			this.movingUp();
+		}else if(this.state.down === true){
+			this.movingDown();
+		}
+	}
+
+
+
 //MOVEMENT FOR LEFT KEY PRESS
-	leftArrowPressed() {
+	leftArrowPressed = () => {
 		this.moveLeft = parseFloat(this.d.style.left) - this.moveSpaceing + 'px';
 		this.d.style.left = this.moveLeft;
+		this.setState({left: true,
+						right: false,
+						up: false,
+						down: false});
 		if(parseFloat(this.d.style.left) < this.leftBounds ){
 			this.d.style.left = this.leftBounds + 'px';
 		}
 	}
 
 //MOVEMENT FOR RIGHT KEY PRESS
-	rightArrowPressed() {
+	rightArrowPressed = () => {
 		this.moveRight = parseFloat(this.d.style.left) + this.moveSpaceing + 'px';
 		this.d.style.left = this.moveRight;
+		this.setState({right: true,
+						left: false,
+						up: false,
+						down: false});
 		if(parseFloat(this.d.style.left) > this.rightBounds ){
 			this.d.style.left = this.rightBounds + 'px';
 		}
 	}
 
 //MOVEMENT FOR UP KEY PRESS
-	upArrowPressed() {
+	upArrowPressed = () => {
 		this.moveUp = parseFloat(this.d.style.top) - this.moveSpaceing + 'px';
 		this.d.style.top = this.moveUp;
+		this.setState({up: true,
+						right: false,
+						left: false,
+						down: false});
 		if(parseFloat(this.d.style.top) < this.topBounds ){
 			this.d.style.top = this.topBounds + 'px';
 		}
 	}
 
 //MOVEMENT FOR DOWN KEY PRESS
-	downArrowPressed() {
+	downArrowPressed = () => {
 		this.moveDown = parseFloat(this.d.style.top) + this.moveSpaceing + 'px';
 		this.d.style.top = this.moveDown;
+		this.setState({down: true,
+						right: false,
+						up: false,
+						left: false});
 		if(parseFloat(this.d.style.top) > this.bottomBounds ){
 			this.d.style.top = this.bottomBounds + 'px';
 		}
@@ -327,7 +347,7 @@ class DotList extends React.Component {
 
 	
 //FUNCTION FOR ADDING NEW DOT FOR ENTER PRESSED
-	enterPressed() {
+	enterPressed = () => {
 		const newState = this.state.dots.map((dot) => {
     		return {...dot, animation: false};
     	});
@@ -358,6 +378,7 @@ class DotList extends React.Component {
 
 			case 13:
 			this.enterPressed();
+			this.contDirection();
 		}
 	}
 
@@ -376,15 +397,14 @@ class DotList extends React.Component {
 		this.dotStartLeft = window.innerWidth * 0.5;
 
 	//map function for creating a new element
-		var text = this.props.text;
 		var dots = this.state.dots;
 		var allDots = dots.map((dot, index) => 
 			<p ref={this.dotRef} 
 			   key={index} 
 			   id={index} 
 			   className={dot.animation ? 'blink-animation' : 'dot'}
-			   style={{position: "absolute", left: this.dotStartLeft + "px", top: this.dotStartTop + 'px', display: "inlineBlock", fontSize: "24px"}}
-			   dangerouslySetInnerHTML={{__html: text }}> 
+			   style={{zIndex: "-1", position: "absolute", left: this.dotStartLeft + "px", top: this.dotStartTop + 'px', display: "inlineBlock", fontSize: "24px"}}
+			   dangerouslySetInnerHTML={{__html: "&#8226;" }}> 
 			</p>
 		);
 

@@ -11,15 +11,10 @@ class StyleBar extends React.Component{
 			shape: '.',
 			spacing: '1px',
 		}
-			
-		//this.handleChange = this.handleChange.bind(this);
-		this.handleOnClick = this.handleOnClick.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
-	handleOnClick(event){
-		this.setState({display: !this.state.display});
-	}
+	
 
 	handleSubmit(event){
 		event.preventDefault();
@@ -40,17 +35,17 @@ class StyleBar extends React.Component{
 				<aside className="style-bar">
 				{window.innerWidth > 700 
 						? 
-				<h2 onClick={this.handleOnClick} style={{top: '0px', left: window.innerWidth - 30 + 'px'}}> Style Bar </h2>
+				<h2 onClick={this.props.handleOnClick} style={{top: '0px', left: window.innerWidth - 30 + 'px'}}> Style Bar </h2>
 						:
-				<h2 onClick={this.handleOnClick} style={{top: '0px', left: window.innerWidth - 30 + 'px'}}> + </h2> }
-					<form style={this.state.display ? {display: "block", width: "10%"} : {display: "none"}} onSubmit={this.handleSubmit}>
+				<h2 onClick={this.props.handleOnClick} style={{top: '0px', left: window.innerWidth - 30 + 'px'}}> + </h2> }
+					<form style={this.props.display ? {display: "block", width: "45%"} : {display: "none", width: "10%"}} onSubmit={this.handleSubmit}>
 						<label>
 						Color:
-							<input type="text" defaultValue={this.props.color} onChange={this.props.triggerColorChange} />
-							<input name="Color Picker" type="color" defaultValue={this.state.color} onChange={this.props.triggerColorChange} />
+							<input type="text" defaultValue={this.props.color} onChange={this.props.triggerColorChange} /><br />
+							<input name="Color Picker" type="color" defaultValue={this.state.color} onChange={this.props.triggerColorChange} /><br />
 							<button className="randomColor" onClick={this.props.randomColor} style={{backgroundColor: this.props.color}} value={this.props.color}> Random Color </button>
 							<button className="save" onClick={this.props.triggerSaveColor} value={this.props.color}> Save </button>
-							{paletteDiv}
+							<br />{paletteDiv}
 
 
 						</label>
