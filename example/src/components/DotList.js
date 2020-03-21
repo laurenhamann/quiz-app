@@ -1,24 +1,25 @@
 import React from 'react';
+import Dot from './Dot';
 
 class DotList extends React.Component {
 	constructor(props){
 		super(props);
 		this.dotRef = React.createRef();
 		this.state = {
-			dots: [
-				{
-					name: "dot",
-					id:0,
-					animation: true,
-					text: this.props.text,
-					color: this.props.color,
-					size: this.props.size
-					// position: [parseInt(this.d.style.top),
-					// 			parseInt(this.d.style.left)
-					// 		]
+			// dots: [
+			// 	{
+			// 		name: "dot",
+			// 		id:0,
+			// 		animation: true,
+			// 		text: this.props.text,
+			// 		color: this.props.color,
+			// 		size: this.props.size
+			// 		// position: [parseInt(this.d.style.top),
+			// 		// 			parseInt(this.d.style.left)
+			// 		// 		]
 				
-				}
-			],
+			// 	}
+			// ],
 			movingLeft: false,
 			movingDown: false,
 			movingUp: false,
@@ -50,35 +51,34 @@ class DotList extends React.Component {
 	componentWillUnmount() {
 		return;
 	}
-//STARTING ID FOR DOT ARRAY
-	prevDotId = 0;
+// //STARTING ID FOR DOT ARRAY
+// 	prevDotId = 0;
 
 //ADDING NEW DOT TO THE DOT ARRAY
-	handleAddDot = (i) => {
-		this.setState( prevState => {
-			return {
-				dots: [
-					...this.state.dots,
-					{
-						name: "dot",
-						id:this.prevDotId += 1,
-						animation: true,
-						text: this.props.text,
-						color: this.props.color,
-						size: this.props.size,
-						position: [parseFloat(this.d.style.top),
-								parseFloat(this.d.style.left)
-							],
-						height: this.dotPos.height
-					}
+	// handleAddDot = (i) => {
+	// 	this.setState( prevState => {
+	// 		return {
+	// 			dots: [
+	// 				...this.state.dots,
+	// 				{
+	// 					name: "dot",
+	// 					id:this.prevDotId += 1,
+	// 					animation: true,
+	// 					text: this.props.text,
+	// 					color: this.props.color,
+	// 					size: this.props.size
+	// 					// position: [parseFloat(this.d.style.top),
+	// 					// 		parseFloat(this.d.style.left)
+	// 					// 	],
+	// 					// height: this.dotPos.height
+	// 				}
 
-				]
-			};
-		});
-        	
-		this.getDotPosition();
-		this.boundaries();
-	}
+	// 			]
+	// 		};
+	// 	});
+
+	
+        
 
 
 //CHANGES FROM THE PARENT COMPONENT FOR CURRENT DOT    
@@ -184,17 +184,18 @@ class DotList extends React.Component {
  	getDotPosition = () => {
  		this.d = this.dotRef.current;
  		this.dotPos = this.d.getBoundingClientRect();
- 		this.prevNode = this.d.previousSibling;
+ 		this.prevNode = this.d.previousSibling === null ? this.d : this.d.previousSibling;
  		this.dotHeight = this.d.offsetHeight;
 		this.prevHeight = this.prevNode.offsetHeight;
 		this.dotWidth = parseFloat(this.d.offsetWidth);
 		this.dotSpace = this.props.space;
 		this.prevDotSpace = this.props.prevSpace;
  		this.widthDoubled = this.dotWidth * 2;
- 		console.log(this.dotWidth);	
+ 		console.log(this.prevNode);	
  		console.log(this.moveSpaceing);
  	}
 
+ 	
  	curveLeft = () => {
  		this.newCurveLeft = parseFloat(this.d.style.left) + (this.curve) + 'px';
 		this.d.style.left = this.newCurveLeft;
@@ -222,6 +223,10 @@ class DotList extends React.Component {
  		this.d.style.top = this.prevNode.style.top;
 		this.d.style.left = parseFloat(this.prevNode.style.left) + this.moveSpaceing + 'px';
 		this.setState({movingRight: true});
+		if(parseFloat(this.d.style.left) > this.rightBounds ){
+			this.d.style.left = this.rightBounds + 'px';
+			this.setState({right: false});
+		}
  	}
 
 //MOVING THE DOT UP THE LEFT SIDE OF SCREEN 	
@@ -230,6 +235,10 @@ class DotList extends React.Component {
 		this.d.style.left = this.prevNode.style.left;
 		//Making the width of this element be the same as the height
 			this.setState({movingDown: true});
+		if(parseFloat(this.d.style.top) > this.bottomBounds ){
+			this.d.style.top = this.bottomBounds + 'px';
+			this.setState({down: false});
+		}
  	}
 
 //MOVING THE DOT UP THE RIGHT SIDE OF SCREEN
@@ -238,12 +247,20 @@ class DotList extends React.Component {
 		this.d.style.top = parseFloat(this.prevNode.style.top) - this.moveSpaceing + 'px';
 		this.negativeSpaceing = this.moveSpaceing * (-1);
 		this.setState({movingUp: true});
+		if(parseFloat(this.d.style.top) < this.topBounds ){
+			this.d.style.top = this.topBounds + 'px';
+			this.setState({up: false});
+		}
  	}
 
  	movingLeft = () => {
 		this.d.style.top = this.prevNode.style.top;
 		this.d.style.left = parseFloat(this.prevNode.style.left) - this.moveSpaceing + 'px';
 		this.setState({movingLeft: true});
+		if(parseFloat(this.d.style.left) < this.leftBounds ){
+			this.d.style.left = this.leftBounds + 'px';
+			this.setState({left: false});
+		}
  	}
 
 
@@ -274,6 +291,7 @@ class DotList extends React.Component {
 			}else if (this.state.hitLeft === true){
 				this.movingDown();
 			}else{
+				alert('ran');
 				this.movingDown();
 			}
 	}
@@ -287,6 +305,8 @@ class DotList extends React.Component {
 			this.movingUp();
 		}else if(this.state.down === true){
 			this.movingDown();
+		}else{
+			this.boundaries();
 		}
 	}
 
@@ -347,14 +367,14 @@ class DotList extends React.Component {
 
 	
 //FUNCTION FOR ADDING NEW DOT FOR ENTER PRESSED
-	enterPressed = () => {
-		const newState = this.state.dots.map((dot) => {
-    		return {...dot, animation: false};
-    	});
-    	this.setState({dots: newState});
-
-  			this.handleAddDot();  		
-  		}
+	// enterPressed = () => {
+	// 	// const newState = this.state.dots.map((dot) => {
+ //  //   		return {...dot, animation: false};
+ //  //   	});
+ //  //   	this.setState({dots: newState});
+ //  			this.boundaries();
+ // 			this.getDotPosition(); 		
+ //  		}
 
 
 //THE MOVING DOT EVENT LISTENER
@@ -377,7 +397,7 @@ class DotList extends React.Component {
 			break;
 
 			case 13:
-			this.enterPressed();
+			this.getDotPosition();
 			this.contDirection();
 		}
 	}
@@ -397,21 +417,25 @@ class DotList extends React.Component {
 		this.dotStartLeft = window.innerWidth * 0.5;
 
 	//map function for creating a new element
-		var dots = this.state.dots;
+		
+		var dots = this.props.dots;
 		var allDots = dots.map((dot, index) => 
-			<p ref={this.dotRef} 
-			   key={index} 
-			   id={index} 
-			   className={dot.animation ? 'blink-animation' : 'dot'}
-			   style={{zIndex: "-1", position: "absolute", left: this.dotStartLeft + "px", top: this.dotStartTop + 'px', display: "inlineBlock", fontSize: "24px"}}
-			   dangerouslySetInnerHTML={{__html: "&#8226;" }}> 
-			</p>
+			<Dot 
+				ref={this.dotRef}
+				key={index}
+				id={index}
+				className={dot.animation}
+				left={this.dotStartLeft}
+				top={this.dotStartTop}
+			/>
 		);
 
+		console.log(allDots);
+
 		return (
-			<React.Fragment>
+			<div>
 				{allDots}
-			</React.Fragment>
+			</div>
 		 );
 
 	}

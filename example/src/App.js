@@ -1,12 +1,25 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import Game from './components/Game';
+import DotList from './components/DotList';
+import StyleBar from './components/StyleBar';
+import TopBar from './components/TopBar';
 
-
-class App extends Component {
+class App extends React.Component{
   constructor(props){
     super(props);
-    this.state = {colors: [
+    this.state = {
+      width: 0,
+      height: 0,
+      game: false,
+      color: "",
+      size: 24,
+      space: 1,
+      prevSpace: 1,
+      text: "&#8226;",
+      display: false,
+      palette:[],
+      dots:[],
+      colors: [
           "#63b598", "#ce7d78", "#ea9e70", "#a48a9e", "#c6e1e8", "#648177" ,"#0d5ac1" ,
           "#f205e6" ,"#1c0365" ,"#14a9ad" ,"#4ca2f9" ,"#a4e43f" ,"#d298e2" ,"#6119d0",
           "#d2737d" ,"#c0a43c" ,"#f2510e" ,"#651be6" ,"#79806e" ,"#61da5e" ,"#cd2f00" ,
@@ -47,23 +60,195 @@ class App extends Component {
           "#88e9b8", "#c2b0e2", "#86e98f", "#ae90e2", "#1a806b", "#436a9e", "#0ec0ff",
           "#f812b3", "#b17fc9", "#8d6c2f", "#d3277a", "#2ca1ae", "#9685eb", "#8a96c6",
           "#dba2e6", "#76fc1b", "#608fa4", "#20f6ba", "#07d7f6", "#dce77a", "#77ecca"]
-
-}
+    };
+    this.enter = this.enter.bind(this);
+    this.handleClickSaveColor = this.handleClickSaveColor.bind(this);
+    this.handleShapeChange = this.handleShapeChange.bind(this);
+    this.handleSpaceChange = this.handleSpaceChange.bind(this);
+    this.handleRandomColor = this.handleRandomColor.bind(this);
+    this.handleSizeChange = this.handleSizeChange.bind(this);
+    this.handleColorChange = this.handleColorChange.bind(this);
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleOpenOnClick = this.handleOpenOnClick.bind(this);
   }
   componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyPress);
+    this.handleAddDot();
+    window.addEventListener('keydown', this.enter);
+    this.updateWindowDimensions();
+    window.addEventListener('resize', this.updateWindowDimensions);
   }
 
   componentWillUnmount() {
-    return;
+    window.removeEventListener('resize', this.updateWindowDimensions);
   }
-  render() {
-    return (
-      <div>      
-         <Game colors={this.state.colors} />
-      </div>
+
+  updateWindowDimensions() {
+    this.setState({ width: window.innerWidth, height: window.innerHeight});
+  }
+
+  //STARTING ID FOR DOT ARRAY
+  prevDotId = 0;
+
+  handleAddDot = (i) => {
+    this.setState( prevState => {
+      return {
+        dots: [
+          ...this.state.dots,
+          {
+            name: "dot",
+            id:this.prevDotId += 1,
+            animation: true,
+            text: this.props.text,
+            color: this.props.color,
+            size: this.props.size
+            // position: [parseFloat(this.d.style.top),
+            //    parseFloat(this.d.style.left)
+            //  ],
+            // height: this.dotPos.height
+          }
+
+        ]
+      };
+    });
+  }
+
+  handleClick() {
+    this.setState({game: true});
+  }
+
+  handleColorChange(event) {
+    this.setState({color: event.target.value });
+  }
+
+  handleRandomColor(event){
+    this.randomColor = this.state.colors[Math.floor(this.state.colors.length * Math.random())];
+    this.setState({color: this.randomColor});
+  }
+
+  
+
+  handleClickSaveColor = (i) => {
+    this.setState( prevState => {
+      return {
+        palette: [
+          ...this.state.palette,
+            {color: this.state.color}
+          
+        ]
+      };
+    });
+    console.log(this.state.palette);
+  }
+
+  handleSizeChange(event){
+    if(event.target.name === 'add'){
+      this.setState(prevState => ({
+        size: prevState.size + 1
+      }));
+    }else{
+      this.setState(prevState => ({
+        size: prevState.size - 1
+      }));
+      if(this.state.size === 12){
+        this.setState({size: 12});
+      }
+    }
+  }
+
+  handleOpenOnClick(event){
+    this.setState({display: !this.state.display});
+  }
+
+  handleShapeChange(event){
+    this.setState({text: event.target.value});
+  }
+
+  handleSpaceChange(event){
+
+    if(event.target.name === 'addSpace'){
+      this.setState(prevState => ({
+        space: prevState.space + 1,
+        prevSpace: prevState.space
+      }));
+    }else{
+      this.setState(prevState => ({
+        space: prevState.space - 1,
+        prevSpace: prevState.space
+      }));
+      if(this.state.space === 0){
+        this.setState({space: 0});
+      }
+    }
+  }
+
+
+    enter(evt) {
+      if(evt.keyCode === 13){
+      const newState = this.state.dots.map((dot) => {
+      return {...dot, animation: false};
+    });
+    this.setState({dots: newState});
+    this.handleAddDot();
+    }
+  }
+
+
+
+  render(){
+    const gameStarted = this.state.game;
+    const newColor = this.state.color;
+    const newSize = this.state.size;
+    const newSpace = this.state.space;
+    const prevStateSpace = this.state.prevSpace;
+    const palette = this.state.palette;
+
+    return(<div style={{width: this.state.width, height: this.state.height}} id="board">
+      
+
+      {gameStarted ? (
+        <React.Fragment>
+          <div className="Header">
+          <StyleBar 
+            triggerColorChange={this.handleColorChange}
+            triggerSizeChange={this.handleSizeChange}
+            triggerSpaceChange={this.handleSpaceChange}
+            triggerShapeChange={this.handleShapeChange}
+            triggerSaveColor={this.handleClickSaveColor}
+            randomColor={this.handleRandomColor}
+            size={newSize}
+            space={newSpace}
+            color={newColor}
+            palette={palette}
+            handleOnClick={this.handleOpenOnClick}
+            display={this.state.display}
+            text={this.props.text}
+             />
+            <TopBar 
+            style={this.state.display === true ? {width: "50%"} : {width: "10%"}}/>
+          </div>
+          <DotList 
+            color={newColor}
+            size={newSize}
+            space={newSpace}
+            prevSpace={prevStateSpace}
+            text={this.state.text}
+            dots={this.state.dots}
+            addDot={this.handleAddDot}
+            enter={this.enter} /> 
+        </React.Fragment>
+      ) : (
+        
+        <button onClick={this.handleClick}>
+          Start game
+        </button>
+      )}
+        
+    </div>
     );
   }
 }
- 
+
+
 export default App;
+

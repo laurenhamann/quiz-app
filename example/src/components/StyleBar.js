@@ -9,7 +9,7 @@ class StyleBar extends React.Component{
 			color: '#000',
 			size: '64px',
 			shape: '.',
-			spacing: '1px',
+			spacing: '1px'
 		}
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
@@ -19,6 +19,8 @@ class StyleBar extends React.Component{
 	handleSubmit(event){
 		event.preventDefault();
 	}
+
+
 
 	render(){
 		const palette = this.props.palette;
