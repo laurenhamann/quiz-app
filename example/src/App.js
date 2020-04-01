@@ -11,14 +11,22 @@ class App extends React.Component{
       width: 0,
       height: 0,
       game: false,
-      color: "",
+      color: "#000",
       size: 24,
       space: 1,
       prevSpace: 1,
       text: "&#8226;",
       display: false,
       palette:[],
-      dots:[],
+        dots:[],
+      history:[],
+      stepNumber: 0,
+      redoIndex: 2,
+      redoCount: 0,
+      undoCount: 0,
+      undo: false,
+      disabledRedo: true,
+      disabledUndo: true,
       colors: [
           "#63b598", "#ce7d78", "#ea9e70", "#a48a9e", "#c6e1e8", "#648177" ,"#0d5ac1" ,
           "#f205e6" ,"#1c0365" ,"#14a9ad" ,"#4ca2f9" ,"#a4e43f" ,"#d298e2" ,"#6119d0",
@@ -61,6 +69,10 @@ class App extends React.Component{
           "#f812b3", "#b17fc9", "#8d6c2f", "#d3277a", "#2ca1ae", "#9685eb", "#8a96c6",
           "#dba2e6", "#76fc1b", "#608fa4", "#20f6ba", "#07d7f6", "#dce77a", "#77ecca"]
     };
+    this.handleOnChange = this.handleOnChange.bind(this);
+    this.handleDotPosition = this.handleDotPosition.bind(this);
+    this.handleRedo = this.handleRedo.bind(this);
+    this.handleUndo = this.handleUndo.bind(this);
     this.enter = this.enter.bind(this);
     this.handleClickSaveColor = this.handleClickSaveColor.bind(this);
     this.handleShapeChange = this.handleShapeChange.bind(this);
@@ -90,6 +102,7 @@ class App extends React.Component{
   //STARTING ID FOR DOT ARRAY
   prevDotId = 0;
 
+
   handleAddDot = (i) => {
     this.setState( prevState => {
       return {
@@ -99,19 +112,31 @@ class App extends React.Component{
             name: "dot",
             id:this.prevDotId += 1,
             animation: true,
-            text: this.props.text,
-            color: this.props.color,
-            size: this.props.size
-            // position: [parseFloat(this.d.style.top),
-            //    parseFloat(this.d.style.left)
-            //  ],
-            // height: this.dotPos.height
+            left: window.innerWidth * 0.5,
+            top: window.innerHeight * 0.5,
+            text: this.state.text,
+            color: this.state.color,
+            size: this.state.size,
+            space: this.state.space
           }
 
         ]
       };
     });
+    this.handleSlice();
   }
+
+  handleSlice = () => { 
+    const history = this.state.history.slice();
+    const slice = this.state.dots.slice();
+    this.setState({
+      history: history.concat([{
+        dots: slice
+      }]),
+      stepNumber: history.length,
+    });
+  }
+
 
   handleClick() {
     this.setState({game: true});
@@ -126,7 +151,96 @@ class App extends React.Component{
     this.setState({color: this.randomColor});
   }
 
-  
+  handleUndo(event){
+    const history = this.state.history.slice();
+    this.handleOnChange();
+    const undoCount = this.state.undoCount;
+    const redoCount = this.state.redoCount;
+    const redoIndex = this.state.redoIndex;
+    const dotsArray = this.state.dots.slice();  
+          dotsArray.splice(-1, 1);
+
+    this.setState({dots: dotsArray,
+                  history: history.concat([{
+                    dots: dotsArray
+                  }]),
+                  undoCount: undoCount + 1,
+                  redoIndex: 2,
+                  disabledRedo: false,
+                });
+
+    this.dotLength = dotsArray.length;
+    const current = dotsArray[dotsArray.length - 1];
+    const index = dotsArray.indexOf(current);
+
+    const slice = dotsArray.slice();
+         slice[index].animation = true;
+
+    this.setState({dots: slice});
+    if(this.dotLength < 2){
+      this.setState({
+        disabledUndo: true
+      });
+    }
+
+  }
+
+   handleRedo(event){
+    const history = this.state.history;
+    const redoIndex = this.state.redoIndex;
+    const undoCount = this.state.undoCount;
+    const redoCount = this.state.redoCount;
+    const current = history[history.length - redoIndex];
+    const lastObjAdded = history.lastIndexOf(current);
+    const sliceHistory = history.slice();
+    const value = history[lastObjAdded].valueOf();
+    const dotValue = history[lastObjAdded].dots.slice();
+    const valueOfDot = dotValue.valueOf();
+    this.setState({
+              dots: valueOfDot,
+              history: history.concat(value),
+              redoIndex: redoIndex + 2,
+              redoCount: redoCount + 1
+              
+    });
+
+    const currentDot = dotValue[dotValue.length - 1];
+    const index = dotValue.indexOf(currentDot);
+    const indexPrev = index - 1;
+    const slice = dotValue.slice();
+         dotValue[indexPrev].animation = false;
+         console.log(dotValue[indexPrev].animation);
+    this.setState({
+      dots: dotValue
+    });
+
+
+     if(this.state.redoCount === this.state.undoCount - 1){
+        console.log('redoRan');
+        this.setState({disabledRedo: true});
+    }
+
+  }
+
+  handleDotPosition() {
+    this.dotNow = document.getElementById('dotList').lastChild;
+    this.left = parseFloat(this.dotNow.style.left);
+    this.top = parseFloat(this.dotNow.style.top);
+    console.log('left');
+  }
+
+  handleOnChange() {
+    console.log('ran');
+    const slice = this.state.dots.slice();
+    const current = slice[slice.length - 1];
+    const index = slice.indexOf(current);
+
+    if(index >= 1){
+      const leftPos = slice[index].left = this.left;
+      const topPos = slice[index].top = this.top;
+      this.setState({dots: leftPos, topPos});
+    }
+  }
 
   handleClickSaveColor = (i) => {
     this.setState( prevState => {
@@ -138,7 +252,6 @@ class App extends React.Component{
         ]
       };
     });
-    console.log(this.state.palette);
   }
 
   handleSizeChange(event){
@@ -185,17 +298,42 @@ class App extends React.Component{
 
     enter(evt) {
       if(evt.keyCode === 13){
-      const newState = this.state.dots.map((dot) => {
-      return {...dot, animation: false};
-    });
-    this.setState({dots: newState});
-    this.handleAddDot();
+        const dot = document.getElementById('dotList').lastChild;
+        const left = parseFloat(dot.style.left);
+        const top = parseFloat(dot.style.top);
+        const dots = this.state.dots;
+        const current = dots[dots.length - 1];
+        const index = dots.indexOf(current);
+        const newState = {  name: "dot",
+                            id:index,
+                            animation: false,
+                            left: left,
+                            top: top,
+                            text: this.state.text,
+                            color: this.state.color,
+                            size: this.state.size,
+                            space: this.state.space};
+
+      const sliceCurrent = dots.slice();
+      sliceCurrent[index] = newState;
+
+      this.setState({dots: sliceCurrent});
+      
+      this.handleAddDot();
+        this.dot = this.state.dots.slice();
+        this.dotLength = this.dot.length;
+      if(this.dotLength >= 2){
+        console.log(this.dotLength);
+        this.setState({disabledUndo: false});
+      }
     }
   }
 
 
 
   render(){
+    const history = this.state.history;
+    const current = history[this.state.stepNumber];
     const gameStarted = this.state.game;
     const newColor = this.state.color;
     const newSize = this.state.size;
@@ -225,7 +363,11 @@ class App extends React.Component{
             text={this.props.text}
              />
             <TopBar 
-            style={this.state.display === true ? {width: "50%"} : {width: "10%"}}/>
+            style={this.state.display === true ? {width: "50%"} : {width: "10%"}}
+            triggerUndo={this.handleUndo}
+            triggerRedo={this.handleRedo}
+            disabledRedo={this.state.disabledRedo}
+            disabledUndo={this.state.disabledUndo}/>
           </div>
           <DotList 
             color={newColor}
@@ -234,8 +376,11 @@ class App extends React.Component{
             prevSpace={prevStateSpace}
             text={this.state.text}
             dots={this.state.dots}
+            history={history}
+            current={current}
             addDot={this.handleAddDot}
-            enter={this.enter} /> 
+            enter={this.enter}
+            triggerPositioning={this.handleDotPosition} /> 
         </React.Fragment>
       ) : (
         

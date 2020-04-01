@@ -68,7 +68,7 @@ class StyleBar extends React.Component{
 								<option name="up arrow" value="&#8657;"> &#8657;</option>
 								<option name="diamond" value="&#9830;"> &#9830;</option>
 								<option name="club" value="&#9827;"> &#9827;</option>
-								<option name="shape" value="&#9824;"> &#9824;</option>
+								<option name="spade" value="&#9824;"> &#9824;</option>
 								<option name="diamond outline" value="&#9674;"> &#9674;</option>
 							</select>
 							<input type="text" defaultValue={this.state.text} onChange={this.props.triggerShapeChange} />

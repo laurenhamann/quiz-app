@@ -10,8 +10,8 @@ function TopBar(props){
 			
 				<h1 className="title"> Dot Game </h1>
 				<div className={window.innerWidth > 700 ? "lgButtons" : "Buttons"}>
-					<button className="undo">Undo</button>
-					<button className="redo"> Redo </button>
+					<button onClick={props.triggerUndo} disabled={props.disabledUndo}className="undo">Undo</button>
+					<button onClick={props.triggerRedo} disabled={props.disabledRedo} className="redo"> Redo </button>
 				</div>
 				
 				
