@@ -6,7 +6,6 @@ class StyleBar extends React.Component{
 		super(props);
 		this.state={
 			display: false,
-			color: '#000',
 			size: '64px',
 			shape: '.',
 			spacing: '1px'
@@ -43,8 +42,8 @@ class StyleBar extends React.Component{
 					<form style={this.props.display ? {display: "block", width: "45%"} : {display: "none", width: "10%"}} onSubmit={this.handleSubmit}>
 						<label>
 						Color:
-							<input type="text" defaultValue={this.props.color} onChange={this.props.triggerColorChange} /><br />
-							<input name="Color Picker" type="color" defaultValue={this.state.color} onChange={this.props.triggerColorChange} /><br />
+							<input type="text" value={this.props.color} onChange={this.props.triggerColorChange} /><br />
+							<input name="Color Picker" type="color" defaultValue={this.props.color} onChange={this.props.triggerColorChange} /><br />
 							<button className="randomColor" onClick={this.props.randomColor} style={{backgroundColor: this.props.color}} value={this.props.color}> Random Color </button>
 							<button className="save" onClick={this.props.triggerSaveColor} value={this.props.color}> Save </button>
 							<br />{paletteDiv}
@@ -71,7 +70,7 @@ class StyleBar extends React.Component{
 								<option name="spade" value="&#9824;"> &#9824;</option>
 								<option name="diamond outline" value="&#9674;"> &#9674;</option>
 							</select>
-							<input type="text" defaultValue={this.state.text} onChange={this.props.triggerShapeChange} />
+							<input type="text" value={this.props.text} onChange={this.props.triggerShapeChange} />
 
 						</label>
 					</form>
