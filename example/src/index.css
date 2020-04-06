@@ -13,6 +13,10 @@ code {
 }
 
 
+/*.startButton{
+	
+}*/
+
 
 /*TOP BAR STYLING*/
 .TopBar{
@@ -121,3 +125,5 @@ p{
    	animation-duration: 1s;
    	animation-iteration-count: infinite;
 }
+
+

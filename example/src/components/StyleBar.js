@@ -1,84 +1,76 @@
 import React from 'react';
 
 
-class StyleBar extends React.Component{
-	constructor(props){
-		super(props);
-		this.state={
-			display: false,
-			size: '64px',
-			shape: '.',
-			spacing: '1px'
-		}
-		this.handleSubmit = this.handleSubmit.bind(this);
-	}
-
-	
-
-	handleSubmit(event){
-		event.preventDefault();
-	}
-
-
-
-	render(){
-		const palette = this.props.palette;
-		const paletteDiv = palette.map((palette, index) =>
-			<button key={index} 
-				style={{backgroundColor: palette.color, width: "10px", height:"10px", borderRadius: "50px"}}
-				onClick={this.props.triggerColorChange}
-				value={palette.color} />
+function StyleBar(props){
+	const palette = props.palette;
+	const paletteDiv = palette.map((palette, index) =>
+		<button key={index} 
+			style={{backgroundColor: palette.color, width: "10px", height:"10px", borderRadius: "50px"}}
+			onClick={props.triggerColorChange}
+			value={palette.color} />
+	)
+	return(
+		<React.Fragment>
+			<aside className="style-bar">
+			{window.innerWidth > 700 
+					? 
+			<h2 onClick={props.handleOnClick} style={{top: '0px', left: window.innerWidth - 30 + 'px'}}> Style Bar </h2>
+					:
+			<h2 onClick={props.handleOnClick} style={{top: '0px', left: window.innerWidth - 30 + 'px'}}> + </h2> }
+				<form style={props.display ? {display: "block", width: "45%"} : {display: "none", width: "10%"}} onSubmit={props.handleSubmit}>
+					<label>
+					Color:
+						<input type="text" value={props.color} onChange={props.triggerColorChange} /><br />
+						<input name="Color Picker" type="color" defaultValue={props.color} onChange={props.triggerColorChange} /><br />
+						<button className="randomColor" onClick={props.randomColor} style={{backgroundColor: props.color, color: props.backgroundColor}} value={props.color}> Random Color </button>
+						<button className="save" onClick={props.triggerSaveColor} value={props.color}> Save </button>
+						<br />{paletteDiv}
 
 
-		)
-		return(
-			<React.Fragment>
-				<aside className="style-bar">
-				{window.innerWidth > 700 
-						? 
-				<h2 onClick={this.props.handleOnClick} style={{top: '0px', left: window.innerWidth - 30 + 'px'}}> Style Bar </h2>
-						:
-				<h2 onClick={this.props.handleOnClick} style={{top: '0px', left: window.innerWidth - 30 + 'px'}}> + </h2> }
-					<form style={this.props.display ? {display: "block", width: "45%"} : {display: "none", width: "10%"}} onSubmit={this.handleSubmit}>
-						<label>
-						Color:
-							<input type="text" value={this.props.color} onChange={this.props.triggerColorChange} /><br />
-							<input name="Color Picker" type="color" defaultValue={this.props.color} onChange={this.props.triggerColorChange} /><br />
-							<button className="randomColor" onClick={this.props.randomColor} style={{backgroundColor: this.props.color}} value={this.props.color}> Random Color </button>
-							<button className="save" onClick={this.props.triggerSaveColor} value={this.props.color}> Save </button>
-							<br />{paletteDiv}
+					</label>
+					<label className="sizeStyle">
+					Size:
+						<button name="sub" className="subtractBtn" onClick={props.triggerSizeChange}> - </button> {props.size} <button name="add" className="additionBtn" onClick={props.triggerSizeChange}>+</button>
+					</label>
+					<label className="spaceStyle">
+					Spacing:
+						<button name="subSpace" className="subtractBtn" onClick={props.triggerSpaceChange}> - </button> {props.space} <button name="addSpace" className="additionBtn" onClick={props.triggerSpaceChange}>+</button>
+					</label>
+					<label className="spaceStyle">
+					Shapes:
+						<select value={props.text} onChange={props.triggerShapeChange}>
+							<option name="dot" value="&#8226;"> &#8226;</option>
+							<option name="heart" value="&#9829;"> &#9829;</option>
+							<option name="right arrow" value="&#8250;"> &#8250;</option>
+							<option name="up arrow" value="&#8657;"> &#8657;</option>
+							<option name="diamond" value="&#9830;"> &#9830;</option>
+							<option name="club" value="&#9827;"> &#9827;</option>
+							<option name="spade" value="&#9824;"> &#9824;</option>
+							<option name="diamond outline" value="&#9674;"> &#9674;</option>
+						</select>
+						<input type="text" value={props.text} onChange={props.triggerShapeChange} />
+					</label>
+					<label>
+					Background:
+						<button onClick={props.randomBackgroundColor} style={{backgroundColor: props.backgroundColor, color: props.color}} value={props.backgroundColor}> Random Color </button>
+					{props.default ? (
+						<button className="blackout" onClick={props.blackOut} style={{color: "#fff", backgroundColor: "#000"}}> 
+							Blackout 
+						</button>
+						)
+					: (
+						<button className="default" onClick={props.blackOut} style={{color: "#000", backgroundColor: "#fff"}}> 
+							Default 
+						</button>
+					)}
+					</label>
 
+				</form>
 
-						</label>
-						<label className="sizeStyle">
-						Size:
-							<button name="sub" className="subtractBtn" onClick={this.props.triggerSizeChange}> - </button> {this.props.size} <button name="add" className="additionBtn" onClick={this.props.triggerSizeChange}>+</button>
-						</label>
-						<label className="spaceStyle">
-						Spacing:
-							<button name="subSpace" className="subtractBtn" onClick={this.props.triggerSpaceChange}> - </button> {this.props.space} <button name="addSpace" className="additionBtn" onClick={this.props.triggerSpaceChange}>+</button>
-						</label>
-						<label className="spaceStyle">
-						Shapes:
-							<select value={this.props.text} onChange={this.props.triggerShapeChange}>
-								<option name="dot" value="&#8226;"> &#8226;</option>
-								<option name="heart" value="&#9829;"> &#9829;</option>
-								<option name="right arrow" value="&#8250;"> &#8250;</option>
-								<option name="up arrow" value="&#8657;"> &#8657;</option>
-								<option name="diamond" value="&#9830;"> &#9830;</option>
-								<option name="club" value="&#9827;"> &#9827;</option>
-								<option name="spade" value="&#9824;"> &#9824;</option>
-								<option name="diamond outline" value="&#9674;"> &#9674;</option>
-							</select>
-							<input type="text" value={this.props.text} onChange={this.props.triggerShapeChange} />
-
-						</label>
-					</form>
-
-				</aside>
-			</React.Fragment>
-		);
-	}
+			</aside>
+		</React.Fragment>
+	);
 }
+
 
 export default StyleBar;

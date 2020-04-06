@@ -31,7 +31,7 @@ class DotList extends React.Component {
 
 //CHANGES FROM THE PARENT COMPONENT FOR CURRENT DOT    
 	handleDotChange(){
-		//STYLE CHANGES FOR DOT
+	//STYLE CHANGES FOR DOT
 		this.d.style.color = this.props.color;
 		this.d.style.fontSize = this.props.size + 'px';
 		this.d.innerHTML = this.props.text;
@@ -40,52 +40,42 @@ class DotList extends React.Component {
 		this.dotSpace = this.props.space;
 		this.prevDotSpace = this.props.prevSpace;
 
-		//DETERMINING THE MOVE DISTANCE
+	//DETERMINING THE MOVE DISTANCE
 		this.dotWidth = parseFloat(this.d.offsetWidth);
 		this.moveSpaceing = this.dotWidth + this.dotSpace;
 
-		//CURVE FOR EACH DIFF SHAPE AND SIZE 
+	//CURVE FOR EACH DIFF SHAPE AND SIZE 
 		this.dWidth = this.d.getBoundingClientRect().width;
 		this.prevWidth = this.prevNode.getBoundingClientRect().width;
- 		this.newCurve = (this.dWidth - this.prevWidth) / 2;
+		this.newCurve = (this.dWidth - this.prevWidth) / 2;
 
- 		this.updateSpace();
-
- 		
+		this.updateSpace();
 	}
 
 	updateSpace = () => {
-		//IF THE DOT SPACE INCREASES
+	//IF THE DOT SPACE INCREASES
 		if(this.dotSpace > this.prevDotSpace){
-			if(this.state.dotDirection === "left"){
+			if(this.props.dotDirection === "left"){
 				this.d.style.left = parseFloat(this.d.style.left) + (this.dotSpace - this.prevDotSpace) + 'px';
-
-			}else if(this.state.dotDirection === "up"){
-	
+			}else if(this.props.dotDirection === "up"){
 				this.d.style.top = parseFloat(this.d.style.top) + (this.dotSpace - this.prevDotSpace) + 'px';
-
-			}else if(this.state.dotDirection === "right"){
+			}else if(this.props.dotDirection === "right"){
 				this.d.style.left = parseFloat(this.d.style.left) + (this.dotSpace - this.prevDotSpace) + 'px';
-
-			}else if(this.state.dotDirection === "down"){
+			}else if(this.props.dotDirection === "down"){
 				this.d.style.top = parseFloat(this.d.style.top) + (this.dotSpace - this.prevDotSpace) + 'px';
 			}
 		}
 
-		//IF DOT SPACE DECREASES
+	//IF DOT SPACE DECREASES
 		if(this.dotSpace < this.prevDotSpace){
-			if(this.state.dotDirection === "left"){
+			if(this.props.dotDirection === "left"){
 				this.d.style.left = parseFloat(this.d.style.left) + (this.dotSpace - this.prevDotSpace) + 'px';
-
-			}else if(this.state.dotDirection === "up"){
-	
+			}else if(this.props.dotDirection === "up"){
 				this.d.style.top = parseFloat(this.d.style.top) + (this.dotSpace - this.prevDotSpace) + 'px';
-
-			}else if(this.state.dotDirection === "right"){
+			}else if(this.props.dotDirection === "right"){
 				this.d.style.left = parseFloat(this.d.style.left) + (this.dotSpace - this.prevDotSpace) + 'px';
-
-			}else if(this.state.dotDirection === "down"){
-	//MOVES DOT SPACING WHEN MINUS BUTTON IS CLICKED BY 1
+			}else if(this.props.dotDirection === "down"){
+			//MOVES DOT SPACING WHEN MINUS BUTTON IS CLICKED BY 1
 				const spaceBetweenTop = parseFloat(this.d.style.top) - 1 + 'px';
 				this.d.style.top = spaceBetweenTop;
 			}	
@@ -108,14 +98,12 @@ class DotList extends React.Component {
  		this.dotHeight = this.d.offsetHeight;
  		this.widthDoubled = this.dotWidth * 2;
  		this.changeDirection();
- 		console.log(this.fontSize);
- 		console.log(this.prevSize);
  		this.fontChanges();
  		this.props.triggerReset();
  	}
 
  	fontChanges = () => {
- // Curving DOT WHEN FONT SIZE INCREASES
+ 	// Curving DOT WHEN FONT SIZE INCREASES
 		if(this.fontSize > this.prevSize){
 			if(this.props.dotDirection === "up"){
 			//MOVES DOT DOWN WHEN MOVING UP
@@ -131,7 +119,6 @@ class DotList extends React.Component {
 				this.curveLeft();
 			}else if(this.props.dotDirection === "down"){
 			//MOVES DOT OVER WHEN MOVING DOWN
-				console.log('ran font changes');
 				this.curveLeft();
 				this.curveUp();
 			}			
@@ -163,16 +150,12 @@ class DotList extends React.Component {
  	curveLeft = () => {
  		this.prevNode.style.left = parseFloat(this.prevNode.style.left) - this.newCurve + 'px';
  	}
-
  	curveUp = () => {
  		this.prevNode.style.top = (parseFloat(this.prevNode.style.top) - this.newCurve) + this.dotSpace + 'px';
  	}
-
  	curveRight = () => {
  		this.prevNode.style.left = parseFloat(this.prevNode.style.left) - this.newCurve + 'px';
- 		
  	}
-
  	curveDown = () => {
  		this.prevNode.style.top = (parseFloat(this.prevNode.style.top) - this.newCurve) - this.dotSpace + 'px';
  	}
@@ -234,77 +217,33 @@ class DotList extends React.Component {
 		}
  	}
 
-
-//THE BOUNDARIES FUNCTION FOR THE SCREEN SIZE
-	boundaries = () => {
-		//Bottom boundary
-		if(this.props.dotDirection === "right" && this.state.hitBoundary){
-			this.movingRight();
-		//Right Boundary
-		}else if (this.props.dotDirection === "up" && this.state.hitBoundary){
-			this.movingUp();
-		//top Boundary
-		}else if (this.props.dotDirection === "left" && this.state.hitBoundary){
-			this.movingLeft();
-		//Left Boundary
-		}else if (this.props.dotDirection === "down" && this.state.hitBoundary){
-			this.movingDown();
-		}
-	}
 //AFTER AN ARROW IS PRESSED, ENTER WILL CONT THE DOT IN ARROW DIRECTION
 	contDirection = () => {
 		if(this.props.dotDirection === "left"){
 			this.movingLeft();
+		//Top Boundary
+			if (this.state.hitBoundary){
+				this.movingLeft();
+			}
 		}else if(this.props.dotDirection === "right"){
 			this.movingRight();
+		//Bottom Boundary
+			if(this.state.hitBoundary){
+				this.movingRight();
+			}
 		}else if(this.props.dotDirection === "up"){
 			this.movingUp();
+		//Right Boundary
+			if (this.state.hitBoundary){
+				this.movingUp();
+			}
 		}else if(this.props.dotDirection === "down"){
+			console.log('cont direction down ran');
 			this.movingDown();
-		}else{
-			this.boundaries();
-		}
-	}
-
-
-
-//MOVEMENT FOR LEFT KEY PRESS
-	leftArrowPressed = () => {
-		this.moveLeft = parseFloat(this.d.style.left) - this.moveSpaceing + 'px';
-		this.d.style.left = this.moveLeft;
-		this.props.changeDirectionLeft();
-		if(this.leftPosition < this.leftBounds ){
-			this.d.style.left = this.leftBounds + 'px';
-		}
-	}
-
-//MOVEMENT FOR RIGHT KEY PRESS
-	rightArrowPressed = () => {
-		this.moveRight = parseFloat(this.d.style.left) + this.moveSpaceing + 'px';
-		this.d.style.left = this.moveRight;
-		this.props.changeDirectionRight();
-		if(this.leftPosition > this.rightBounds ){
-			this.d.style.left = this.rightBounds + 'px';
-		}
-	}
-
-//MOVEMENT FOR UP KEY PRESS
-	upArrowPressed = () => {
-		this.moveUp = parseFloat(this.d.style.top) - this.moveSpaceing + 'px';
-		this.d.style.top = this.moveUp;
-		this.props.changeDirectionUp();
-		if(this.topPosition < this.topBounds ){
-			this.d.style.top = this.topBounds + 'px';
-		}
-	}
-
-//MOVEMENT FOR DOWN KEY PRESS
-	downArrowPressed = () => {
-		this.moveDown = parseFloat(this.d.style.top) + this.moveSpaceing + 'px';
-		this.d.style.top = this.moveDown;
-		this.props.changeDirectionDown();
-		if(this.topPosition > this.bottomBounds ){
-			this.d.style.top = this.bottomBounds + 'px';
+		//Left Boundary
+			if (this.state.hitBoundary){
+				this.movingDown();
+			}
 		}
 	}
 
@@ -313,26 +252,28 @@ class DotList extends React.Component {
 	moveDot(evt) {
 		switch (evt.keyCode) {
 			case 37:
-			this.leftArrowPressed();
+			this.props.changeDirectionLeft();
+			this.contDirection();
 			break;
 
 			case 39:
-			this.rightArrowPressed();
+			this.props.changeDirectionRight();
+			this.contDirection();
 			break;
 
 			case 38:
-			this.upArrowPressed();
+			this.props.changeDirectionUp();
+			this.contDirection();
 			break;
 
 			case 40:
-			this.downArrowPressed();
+			this.props.changeDirectionDown();
+			this.contDirection();
 			break;
 
 			case 13:
-			//this.changeDirection();
 			this.getDotPosition();
-			this.contDirection();
-			//this.handleSlice();		
+			this.contDirection();		
 		}
 	}
 
@@ -340,11 +281,8 @@ class DotList extends React.Component {
 	render() {
 	//BOUNDARIES FOR THE SCREENSIZE
 		this.topBounds = window.innerHeight * 0.2;
-
 		this.bottomBounds = window.innerHeight * 0.9;
-
 		this.leftBounds = window.innerWidth * 0.05;
-
 		this.rightBounds = window.innerWidth * 0.9;
 
 	//map function for creating a new element

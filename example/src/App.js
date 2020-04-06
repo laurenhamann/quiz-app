@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import React from 'react';
 import DotList from './components/DotList';
 import StyleBar from './components/StyleBar';
 import TopBar from './components/TopBar';
@@ -11,21 +10,24 @@ class App extends React.Component{
       width: 0,
       height: 0,
       game: false,
-      color: "#000",
-      size: 24,
-      space: 1,
-      prevSpace: 1,
-      text: "&#8226;",
-      display: false,
-      palette:[],
-        dots:[],
+      dots:[],
       history:[],
-      stepNumber: 0,
+      default: true,
+      backgroundColor: "#fff",
+      //Top Bar State
       redoIndex: 2,
       redoCount: 0,
       undoCount: 0,
       disabledRedo: true,
       disabledUndo: true,
+      //Style Bar State
+      display: false,
+      color: "#000",
+      size: 24,
+      space: 1,
+      prevSpace: 1,
+      text: "&#8226;",
+      palette:[],
       colors: [
           "#63b598", "#ce7d78", "#ea9e70", "#a48a9e", "#c6e1e8", "#648177" ,"#0d5ac1" ,
           "#f205e6" ,"#1c0365" ,"#14a9ad" ,"#4ca2f9" ,"#a4e43f" ,"#d298e2" ,"#6119d0",
@@ -68,26 +70,32 @@ class App extends React.Component{
           "#f812b3", "#b17fc9", "#8d6c2f", "#d3277a", "#2ca1ae", "#9685eb", "#8a96c6",
           "#dba2e6", "#76fc1b", "#608fa4", "#20f6ba", "#07d7f6", "#dce77a", "#77ecca"]
     };
-    this.resetButtons = this.resetButtons.bind(this);
+    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleDotPosition = this.handleDotPosition.bind(this);
     this.changeDotPositionState = this.changeDotPositionState.bind(this);
     this.changeDirectionUp = this.changeDirectionUp.bind(this);
     this.changeDirectionDown = this.changeDirectionDown.bind(this);
     this.changeDirectionLeft = this.changeDirectionLeft.bind(this);
-    this.changeDirectionRight = this.changeDirectionRight.bind(this);
-    this.handleOnChange = this.handleOnChange.bind(this);
-    this.handleDotPosition = this.handleDotPosition.bind(this);
+    this.changeDirectionRight = this.changeDirectionRight.bind(this);    
+    this.enter = this.enter.bind(this);
+    //TOP BAR FUNCTIONS
     this.handleRedo = this.handleRedo.bind(this);
     this.handleUndo = this.handleUndo.bind(this);
-    this.enter = this.enter.bind(this);
+    this.handleOnChange = this.handleOnChange.bind(this);
+    this.resetButtons = this.resetButtons.bind(this);
+    this.resetAll = this.resetAll.bind(this);
+    //STYLE BAR FUNCTIONS
+    this.handleOpenOnClick = this.handleOpenOnClick.bind(this);
+    this.handleColorChange = this.handleColorChange.bind(this);
     this.handleClickSaveColor = this.handleClickSaveColor.bind(this);
-    this.handleShapeChange = this.handleShapeChange.bind(this);
-    this.handleSpaceChange = this.handleSpaceChange.bind(this);
     this.handleRandomColor = this.handleRandomColor.bind(this);
     this.handleSizeChange = this.handleSizeChange.bind(this);
-    this.handleColorChange = this.handleColorChange.bind(this);
-    this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.handleOpenOnClick = this.handleOpenOnClick.bind(this);
+    this.handleShapeChange = this.handleShapeChange.bind(this);
+    this.handleSpaceChange = this.handleSpaceChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.blackOut = this.blackOut.bind(this);
+    this.handleBackgroundRandomColor = this.handleBackgroundRandomColor.bind(this);
   }
   componentDidMount() {
     this.handleAddDot();
@@ -104,7 +112,12 @@ class App extends React.Component{
     this.setState({ width: window.innerWidth, height: window.innerHeight});
   }
 
-  //STARTING ID FOR DOT ARRAY
+//CLICK FOR STARTING THE GAME
+  handleClick() {
+    this.setState({game: true});
+  }
+
+//STARTING ID FOR DOT ARRAY
   prevDotId = 0;
 
 //CONCATING NEW DOT 
@@ -140,15 +153,8 @@ class App extends React.Component{
       history: history.concat([{
         dots: slice
       }]),
-      stepNumber: history.length,
     });
   }
-
-//CLICK FOR STARTING THE GAME
-  handleClick() {
-    this.setState({game: true});
-  }
-
 
 //GET STATE OF DOT DIRECTION
  getDotDirection() {
@@ -158,22 +164,28 @@ class App extends React.Component{
     this.dotDirection = slice[index].dotDirection;
  }
 
+//ALWAYS GETTING POSITION OF DOT IN DOTLIST COMPONENTUPDATE
+  handleDotPosition() {
+    this.dotNow = document.getElementById('dotList').lastChild;
+    this.left = parseFloat(this.dotNow.style.left);
+    this.top = parseFloat(this.dotNow.style.top);
+  }
 
- //CHANGING LEFT AND TOP STATE ON KEY MOVES
 
- changeDotPositionState() {
-  const slice = this.state.dots.slice();
-  const current = slice[slice.length - 1];
-  const index = slice.indexOf(current);
-    slice[index].left = this.left;
-    slice[index].top = this.top;
-  this.setState({dots: slice});
- }
+//CHANGING LEFT AND TOP STATE ON KEY MOVES
+  changeDotPositionState() {
+    const slice = this.state.dots.slice();
+    const current = slice[slice.length - 1];
+    const index = slice.indexOf(current);
+      slice[index].left = this.left;
+      slice[index].top = this.top;
+    this.setState({dots: slice});
+  }
 
 
 //CHANGING STATE DEPENDANT ON DOTLIST FUNCTION CALLS
 
-  //down
+//down
   changeDirectionDown(){
     const slice = this.state.dots.slice();
     const current = slice[slice.length - 1];
@@ -184,7 +196,7 @@ class App extends React.Component{
     this.getDotDirection();
   }
 
-  //right
+//right
   changeDirectionRight(){
     const dots = this.state.dots.slice();
     const current = dots[dots.length - 1];
@@ -195,8 +207,9 @@ class App extends React.Component{
     this.getDotDirection();
   }
   
-  //left
+//left
   changeDirectionLeft(){
+    console.log('props ran');
     const dots = this.state.dots.slice();
     const current = dots[dots.length - 1];
     const index = dots.indexOf(current);
@@ -206,7 +219,7 @@ class App extends React.Component{
     this.getDotDirection();
   }
 
-  //up
+//up
   changeDirectionUp(){
     const dots = this.state.dots.slice();
     const current = dots[dots.length - 1];
@@ -217,6 +230,42 @@ class App extends React.Component{
     this.getDotDirection();
   }
 
+//ON ENTER PRESS 
+  enter(evt) {
+    if(evt.keyCode === 13){
+      this.getDotDirection();
+      const dot = document.getElementById('dotList').lastChild;
+      const left = parseFloat(dot.style.left);
+      const top = parseFloat(dot.style.top);
+      const dots = this.state.dots;
+      const current = dots[dots.length - 1];
+      const index = dots.indexOf(current);
+
+      const sliceCurrent = dots.slice();
+        sliceCurrent[index].animation = false;
+        sliceCurrent[index].left = left;
+        sliceCurrent[index].top = top;
+        sliceCurrent[index].color = this.state.color;
+        sliceCurrent[index].text = this.state.text;
+        sliceCurrent[index].space = this.state.space;
+        sliceCurrent[index].size = this.state.size;
+      this.setState({dots: sliceCurrent});
+
+    //Adding another dot
+      this.handleAddDot();
+      this.dot = this.state.dots.slice();
+      this.dotLength = this.dot.length;
+    //WHEN THE DOTS ARRAY IS GREATER THAN OR EQUAL TO 2 BUTTON IS NO LONGER DISABLED
+      if(this.dotLength >= 2){
+        this.setState({disabledUndo: false});
+      }
+    }
+  }
+
+
+//////////TOP BAR /////////////
+
+
 //EVENT FOR UNDO BUTTON IN STYLEBAR TO UNDO THE NEWEST DOT
   handleUndo(event){
     const history = this.state.history.slice();
@@ -225,8 +274,6 @@ class App extends React.Component{
 
     //TRACKING THE COUNTS
     const undoCount = this.state.undoCount;
-    const redoCount = this.state.redoCount;
-    const redoIndex = this.state.redoIndex;
     const dotsArray = this.state.dots.slice();  
           dotsArray.splice(-1, 1);
 
@@ -268,22 +315,20 @@ class App extends React.Component{
 
 
 //EVENT FOR REDO BUTTON IN STYLEBAR TO REDO THE LATEST UNDID DOT
-   handleRedo(event){
+  handleRedo(event){
     const history = this.state.history;
 
-    //TRACKING WHICH HISTORY OF DOT TO USE
+  //TRACKING WHICH HISTORY OF DOT TO USE
     const redoIndex = this.state.redoIndex;
 
-    //TRACKING THE COUNTS
-    const undoCount = this.state.undoCount;
+  //TRACKING THE COUNTS
     const redoCount = this.state.redoCount;
 
-    //GETTING CORRECT DOT HISTORY
+  //GETTING CORRECT DOT HISTORY
     const current = history[history.length - redoIndex];
     const lastObjAdded = history.lastIndexOf(current);
-    const sliceHistory = history.slice();
 
-    //GETTING VALUE OF THE CORRECT HISTORY SLICE 
+  //GETTING VALUE OF THE CORRECT HISTORY SLICE 
     const value = history[lastObjAdded].valueOf();
     const dotValue = history[lastObjAdded].dots.slice();
     const valueOfDot = dotValue.valueOf();
@@ -295,7 +340,7 @@ class App extends React.Component{
               
     });
 
-    //SETTING THE STATE OF THE DOT TO DOTS
+  //SETTING THE STATE OF THE DOT TO DOTS
     const currentDot = dotValue[dotValue.length - 1];
     const index = dotValue.indexOf(currentDot);
     const indexPrev = index - 1;
@@ -304,7 +349,6 @@ class App extends React.Component{
     const size = dotValue[indexPrev].size;
     const space = dotValue[indexPrev].space;
          dotValue[indexPrev].animation = false;
-         console.log(dotValue[indexPrev]);
     this.setState({
       dots: dotValue,
       color: color,
@@ -321,14 +365,7 @@ class App extends React.Component{
     }
   }
 
-  //ALWAYS GETTING POSITION OF DOT IN DOTLIST COMPONENTUPDATE
-  handleDotPosition() {
-    this.dotNow = document.getElementById('dotList').lastChild;
-    this.left = parseFloat(this.dotNow.style.left);
-    this.top = parseFloat(this.dotNow.style.top);
-  }
-
-  //SETS STATE WHEN UNDO BUTTON IS CLICKED
+//SETS STATE WHEN UNDO BUTTON IS CLICKED
   handleOnChange() {
     const slice = this.state.dots.slice();
     const current = slice[slice.length - 1];
@@ -339,8 +376,8 @@ class App extends React.Component{
     const space = slice[index].space;
 
     if(index >= 1){
-      const leftPos = slice[index].left = this.left;
-      const topPos = slice[index].top = this.top;
+      slice[index].left = this.left;
+      slice[index].top = this.top;
       const currentState = { left: this.left,
                               top: this.top
                                 }
@@ -352,30 +389,29 @@ class App extends React.Component{
     }
   }
 
-  //EVENT FOR SAVE BUTTON IN STYLEBAR TO SAVE A PALETTE 
-  handleClickSaveColor = (i) => {
-    this.setState( prevState => {
-      return {
-        palette: [
-          ...this.state.palette,
-            {color: this.state.color}
-          
-        ]
-      };
-    });
+//Resetting state for redoCount and UNDOCOUNT
+  resetButtons() {
+    this.setState({undoCount: 0,
+                    redoCount: 0,
+                    disabledRedo: true});
   }
 
+  resetAll(){
+    alert('Would you like to reset the game?');
+    this.setState({game: false});
+    window.location.reload();
+  }
 
 
 //////////STYLE BAR /////////////
 
 
-  //OPENS STYLE BAR ON CLICK
+//OPENS STYLE BAR ON CLICK
   handleOpenOnClick(event){
     this.setState({display: !this.state.display});
   }
 
-  //EVENT FOR BUTTON IN STYLEBAR TO CHANGE DOT COLOR
+//EVENT FOR BUTTON IN STYLEBAR TO CHANGE DOT COLOR
   handleColorChange(event) {
     this.setState({color: event.target.value });
   }
@@ -387,7 +423,7 @@ class App extends React.Component{
   }
 
 
-  //EVENT FOR SIZE BUTTONS IN STYLEBAR TO CHANGE FONT SIZE 
+//EVENT FOR SIZE BUTTONS IN STYLEBAR TO CHANGE FONT SIZE 
   handleSizeChange(event){
     if(event.target.name === 'add'){
       this.setState(prevState => ({
@@ -403,7 +439,7 @@ class App extends React.Component{
     }
   }
 
-  //EVENT FOR SPACE BUTTONS IN STYLEBAR TO CHANGE THE SPACING BETWEEN DOTS
+//EVENT FOR SPACE BUTTONS IN STYLEBAR TO CHANGE THE SPACING BETWEEN DOTS
   handleSpaceChange(event){
     if(event.target.name === 'addSpace'){
       this.setState(prevState => ({
@@ -421,77 +457,66 @@ class App extends React.Component{
     }
   }
 
-  //EVENT FOR SHAPE BUTTONS IN STYLEBAR TO CHANGE TEXT INPUT 
+//EVENT FOR SHAPE BUTTONS IN STYLEBAR TO CHANGE TEXT INPUT 
   handleShapeChange(event){
     this.setState({text: event.target.value});
   }
 
-  //Resetting state for redoCount and UNDOCOUNT
+//EVENT FOR SAVE BUTTON IN STYLEBAR TO SAVE A PALETTE 
+  handleClickSaveColor = (i) => {
+    this.setState( prevState => {
+      return {
+        palette: [
+          ...this.state.palette,
+            {color: this.state.color}
+          
+        ]
+      };
+    });
+  }
 
-    resetButtons() {
-      this.setState({undoCount: 0,
-                      redoCount: 0,
-                      disabledRedo: true});
-    }
+  handleSubmit(event){
+    event.preventDefault();
+  }
 
+//BACKGROUND CHANGES
 
-  //ON ENTER PRESS 
-    enter(evt) {
-      if(evt.keyCode === 13){
-        this.getDotDirection();
-        const dot = document.getElementById('dotList').lastChild;
-        const left = parseFloat(dot.style.left);
-        const top = parseFloat(dot.style.top);
-        const dots = this.state.dots;
-        const current = dots[dots.length - 1];
-        const index = dots.indexOf(current);
-
-        const sliceCurrent = dots.slice();
-          sliceCurrent[index].animation = false;
-          sliceCurrent[index].left = left;
-          sliceCurrent[index].top = top;
-          sliceCurrent[index].color = this.state.color;
-          sliceCurrent[index].text = this.state.text;
-          sliceCurrent[index].space = this.state.space;
-          sliceCurrent[index].size = this.state.size;
-
-
-      this.setState({dots: sliceCurrent});
-      
-      this.handleAddDot();
-
-      //WHEN THE DOTS ARRAY IS GREATER THAN OR EQUAL TO 2 BUTTON IS NO LONGER DISABLED
-        this.dot = this.state.dots.slice();
-        this.dotLength = this.dot.length;
-      if(this.dotLength >= 2){
-        this.setState({disabledUndo: false});
-      }
+//EVENT FOR BUTTON IN STYLEBAR TO CHANGE DOT TO RANDOMCOLOR
+  handleBackgroundRandomColor(event){
+    const randomColor = this.state.colors[Math.floor(this.state.colors.length * Math.random())];
+    this.setState({ default: false,
+                    backgroundColor: randomColor});
+  }
+//Blackout Feature 
+  blackOut() {
+    this.setState(prevState => ({default: !prevState.default}));
+    if(this.state.default === false){
+      this.setState({backgroundColor: "#ffffff",
+                      color: "#000000"})
+    }else if(this.state.default){
+      this.setState({backgroundColor: "#000000",
+                      color: "#ffffff"})
     }
   }
 
 
 
   render(){
-    const history = this.state.history;
-    const current = history[this.state.stepNumber];
     const dots = this.state.dots.slice();
     const currentDot = dots[dots.length - 1];
     const indexOfCurrentDot = dots.indexOf(currentDot);
     const dotDirection = this.dotDirection;
-    const gameStarted = this.state.game;
     const newColor = this.state.color;
     const newSize = this.state.size;
     const newSpace = this.state.space;
     const prevStateSpace = this.state.prevSpace;
     const palette = this.state.palette;
     const undoCount = this.state.undoCount;
-    const redoCount = this.state.redoCount;
-    const undoDisabled = this.state.disabledUndo;
 
-    return(<div style={{width: this.state.width, height: this.state.height}} id="board">
+    return(<div style={{width: this.state.width, height: this.state.height, backgroundColor: this.state.backgroundColor}} id="board">
       
 
-      {gameStarted ? (
+      {this.state.game ? (
         <React.Fragment>
           <div className="Header">
           <StyleBar 
@@ -508,13 +533,21 @@ class App extends React.Component{
             handleOnClick={this.handleOpenOnClick}
             display={this.state.display}
             text={this.props.text}
+            blackOut={this.blackOut}
+            default={this.state.default}
+            randomBackgroundColor={this.handleBackgroundRandomColor}
+            backgroundColor={this.state.backgroundColor}
+            handleSubmit={this.handleSubmit}
              />
             <TopBar 
             style={this.state.display === true ? {width: "50%"} : {width: "10%"}}
             triggerUndo={this.handleUndo}
             triggerRedo={this.handleRedo}
             disabledRedo={this.state.disabledRedo}
-            disabledUndo={this.state.disabledUndo}/>
+            disabledUndo={this.state.disabledUndo}
+            default={this.state.default}
+            resetAll={this.resetAll}
+            />
           </div>
           <DotList 
             color={newColor}
@@ -540,7 +573,7 @@ class App extends React.Component{
         </React.Fragment>
       ) : (
         
-        <button onClick={this.handleClick}>
+        <button className="startButton" onClick={this.handleClick}>
           Start game
         </button>
       )}
