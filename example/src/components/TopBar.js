@@ -10,9 +10,9 @@ function TopBar(props){
 			
 				<h1 className="title" style={props.default ? {color: "#000000"} : {color: "#ffffff"}}> Dot Game </h1>
 				<div className={window.innerWidth > 700 ? "lgButtons" : "Buttons"}>
-					<button onClick={props.triggerUndo} disabled={props.disabledUndo}className="undo">Undo</button>
-					<button onClick={props.triggerRedo} disabled={props.disabledRedo} className="redo"> Redo </button>
-					<button onClick={props.resetAll}> Reset </button>
+					<button onClick={props.triggerUndo} disabled={props.disabledUndo}className={props.disabledUndo ? "undo button" : "undoAbled undo button"}>Undo</button>
+					<button onClick={props.triggerRedo} disabled={props.disabledRedo} className={props.disabledRedo ? "redo button" : "redoAbled redo button"}> Redo </button>
+					<button onClick={props.resetAll} className="reset button"> Reset </button>
 				</div>
 				
 				

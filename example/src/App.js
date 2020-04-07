@@ -77,7 +77,8 @@ class App extends React.Component{
     this.changeDirectionUp = this.changeDirectionUp.bind(this);
     this.changeDirectionDown = this.changeDirectionDown.bind(this);
     this.changeDirectionLeft = this.changeDirectionLeft.bind(this);
-    this.changeDirectionRight = this.changeDirectionRight.bind(this);    
+    this.changeDirectionRight = this.changeDirectionRight.bind(this);
+    this.selectDot = this.selectDot.bind(this);    
     this.enter = this.enter.bind(this);
     //TOP BAR FUNCTIONS
     this.handleRedo = this.handleRedo.bind(this);
@@ -162,6 +163,7 @@ class App extends React.Component{
     const current = slice[slice.length - 1];
     const index = slice.indexOf(current);
     this.dotDirection = slice[index].dotDirection;
+    console.log('dot position', this.dotDirection);
  }
 
 //ALWAYS GETTING POSITION OF DOT IN DOTLIST COMPONENTUPDATE
@@ -192,8 +194,8 @@ class App extends React.Component{
     const index = slice.indexOf(current);
      slice[index].dotDirection = "down";
     this.setState({dots: slice});
-    this.changeDotPositionState();
     this.getDotDirection();
+    this.changeDotPositionState();
   }
 
 //right
@@ -209,7 +211,6 @@ class App extends React.Component{
   
 //left
   changeDirectionLeft(){
-    console.log('props ran');
     const dots = this.state.dots.slice();
     const current = dots[dots.length - 1];
     const index = dots.indexOf(current);
@@ -228,6 +229,25 @@ class App extends React.Component{
     this.setState({dots: dots});
     this.changeDotPositionState();
     this.getDotDirection();
+  }
+
+
+//Onclick of dots
+  selectDot(event){
+    const dot = this.state.dots.slice();
+    const selectedDot = event.target.getAttribute('id');
+    const thisDot = document.getElementById(selectedDot);
+    const currColor = dot[selectedDot].color;
+    const currText = dot[selectedDot].text;
+    const currSize = dot[selectedDot].size;
+    const currSpace = dot[selectedDot].space;
+    if(currColor != this.state.color){
+      dot[selectedDot].color = this.state.color;
+      this.setState({dots: dot});
+    }else if(currText != this.state.text){
+      dot[selectedDot].text = this.state.text;
+      this.setState({dots: dot});
+    }
   }
 
 //ON ENTER PRESS 
@@ -502,6 +522,8 @@ class App extends React.Component{
 
 
   render(){
+    const halfWidth = window.innerWidth / 2;
+    const leftButton = halfWidth - 104.6485;
     const dots = this.state.dots.slice();
     const currentDot = dots[dots.length - 1];
     const indexOfCurrentDot = dots.indexOf(currentDot);
@@ -512,6 +534,7 @@ class App extends React.Component{
     const prevStateSpace = this.state.prevSpace;
     const palette = this.state.palette;
     const undoCount = this.state.undoCount;
+    
 
     return(<div style={{width: this.state.width, height: this.state.height, backgroundColor: this.state.backgroundColor}} id="board">
       
@@ -568,12 +591,13 @@ class App extends React.Component{
             changeDirectionLeft={this.changeDirectionLeft}
             changeDirectionRight={this.changeDirectionRight}
             dotDirection={dotDirection}
+            selectDot={this.selectDot}
              /> 
-            
+            }
         </React.Fragment>
       ) : (
         
-        <button className="startButton" onClick={this.handleClick}>
+        <button className="startButton" onClick={this.handleClick} style={{position: "absolute", left: leftButton + 'px', top: window.innerHeight * 0.4}}>
           Start game
         </button>
       )}

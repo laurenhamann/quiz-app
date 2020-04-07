@@ -48,7 +48,6 @@ class DotList extends React.Component {
 		this.dWidth = this.d.getBoundingClientRect().width;
 		this.prevWidth = this.prevNode.getBoundingClientRect().width;
 		this.newCurve = (this.dWidth - this.prevWidth) / 2;
-
 		this.updateSpace();
 	}
 
@@ -238,7 +237,6 @@ class DotList extends React.Component {
 				this.movingUp();
 			}
 		}else if(this.props.dotDirection === "down"){
-			console.log('cont direction down ran');
 			this.movingDown();
 		//Left Boundary
 			if (this.state.hitBoundary){
@@ -284,7 +282,7 @@ class DotList extends React.Component {
 		this.bottomBounds = window.innerHeight * 0.9;
 		this.leftBounds = window.innerWidth * 0.05;
 		this.rightBounds = window.innerWidth * 0.9;
-
+		console.log('dotlist:', this.props.dotDirection);
 	//map function for creating a new element
 		
 		var dots = this.props.dots;
@@ -298,6 +296,7 @@ class DotList extends React.Component {
 				color={dot.color}
 				font={dot.size}
 				shape={dot.text}
+				selectDot={this.props.selectDot}
 			/>
 		);
 		return (

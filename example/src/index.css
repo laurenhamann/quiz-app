@@ -13,10 +13,12 @@ code {
 }
 
 
-/*.startButton{
-	
-}*/
-
+/*rid the spacing between dots*/
+p{
+	margin: 0;
+	line-height: 20%;
+	cursor:pointer;
+}
 
 /*TOP BAR STYLING*/
 .TopBar{
@@ -41,6 +43,10 @@ code {
 	margin-right: 5%;
 }
 
+.lgButtons .button{
+	width:60px;
+}
+
 
 .undo, 
 .redo{
@@ -48,8 +54,8 @@ code {
 	border:none;
 }
 
-.undo:hover,
-.redo:hover{
+.undoAbled:hover,
+.redoAbled:hover{
 	font-weight: bold;
 }
 
@@ -60,9 +66,22 @@ code {
 }
 
 /*STYLE BAR*/
-.style-bar{
+.stylebar{
+	float:left;
+}
+
+.styleBarBackgroundColor{
 	float:left;
 	background-color: #eee
+}
+
+.style-bar{
+	background-color: #eee
+}
+
+.blackOutStyleBar{
+	background-color: none;
+	color:#fff;
 }
 
 /*style for label button sizing*/
@@ -93,11 +112,14 @@ code {
 }
 
 
-/*rid the spacing between dots*/
-p{
-	margin: 0;
-	font-size: 64px;
-	line-height: 20%;
+/*Start Button*/
+.startButton{
+	background-color: #fff;
+	border: none;
+	font-size: 45px;
+	animation-name: circleBlinking;
+   	animation-duration: 4s;
+   	animation-iteration-count: infinite;
 }
 /*Blinking Animation*/
 
