@@ -163,11 +163,11 @@ class App extends React.Component{
     const current = slice[slice.length - 1];
     const index = slice.indexOf(current);
     this.dotDirection = slice[index].dotDirection;
-    console.log('dot position', this.dotDirection);
  }
 
 //ALWAYS GETTING POSITION OF DOT IN DOTLIST COMPONENTUPDATE
   handleDotPosition() {
+    console.log('handleDotPosition');
     this.dotNow = document.getElementById('dotList').lastChild;
     this.left = parseFloat(this.dotNow.style.left);
     this.top = parseFloat(this.dotNow.style.top);
@@ -176,6 +176,7 @@ class App extends React.Component{
 
 //CHANGING LEFT AND TOP STATE ON KEY MOVES
   changeDotPositionState() {
+    console.log('changeDotPositionState');
     const slice = this.state.dots.slice();
     const current = slice[slice.length - 1];
     const index = slice.indexOf(current);
@@ -192,9 +193,9 @@ class App extends React.Component{
     const slice = this.state.dots.slice();
     const current = slice[slice.length - 1];
     const index = slice.indexOf(current);
-     slice[index].dotDirection = "down";
+      slice[index].dotDirection = "down";
     this.setState({dots: slice});
-    this.getDotDirection();
+    this.dotDirection = slice[index].dotDirection;
     this.changeDotPositionState();
   }
 
@@ -205,8 +206,8 @@ class App extends React.Component{
     const index = dots.indexOf(current);
         dots[index].dotDirection = "right";
     this.setState({dots: dots});
+    this.dotDirection = dots[index].dotDirection;
     this.changeDotPositionState();
-    this.getDotDirection();
   }
   
 //left
@@ -216,8 +217,8 @@ class App extends React.Component{
     const index = dots.indexOf(current);
         dots[index].dotDirection = "left";
     this.setState({dots: dots});
+    this.dotDirection = dots[index].dotDirection;
     this.changeDotPositionState();
-    this.getDotDirection();
   }
 
 //up
@@ -227,8 +228,8 @@ class App extends React.Component{
     const index = dots.indexOf(current);
         dots[index].dotDirection = "up";
     this.setState({dots: dots});
+    this.dotDirection = dots[index].dotDirection;
     this.changeDotPositionState();
-    this.getDotDirection();
   }
 
 
@@ -593,7 +594,6 @@ class App extends React.Component{
             dotDirection={dotDirection}
             selectDot={this.selectDot}
              /> 
-            }
         </React.Fragment>
       ) : (
         

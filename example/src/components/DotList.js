@@ -216,6 +216,41 @@ class DotList extends React.Component {
 		}
  	}
 
+ 	leftArrowPressed = () => {
+		this.moveLeft = parseFloat(this.d.style.left) - this.moveSpaceing + 'px';
+		this.d.style.left = this.moveLeft;
+		this.props.changeDirectionLeft();
+		if(this.leftPosition < this.leftBounds ){
+			this.d.style.left = this.leftBounds + 'px';
+		}
+	}
+
+ 	rightArrowPressed = () => {
+		this.moveRight = parseFloat(this.d.style.left) + this.moveSpaceing + 'px';
+		this.d.style.left = this.moveRight;
+		this.props.changeDirectionRight();
+		if(this.leftPosition > this.rightBounds ){
+			this.d.style.left = this.rightBounds + 'px';
+		}
+	}
+	upArrowPressed = () => {
+		this.moveUp = parseFloat(this.d.style.top) - this.moveSpaceing + 'px';
+		this.d.style.top = this.moveUp;
+		this.props.changeDirectionUp();
+		if(this.topPosition < this.topBounds ){
+			this.d.style.top = this.topBounds + 'px';
+		}
+	}
+
+
+ 	downArrowPressed = () => {
+		this.moveDown = parseFloat(this.d.style.top) + this.moveSpaceing + 'px';
+		this.d.style.top = this.moveDown;
+		this.props.changeDirectionDown();
+		if(this.topPosition > this.bottomBounds ){
+			this.d.style.top = this.bottomBounds + 'px';
+	}
+}
 //AFTER AN ARROW IS PRESSED, ENTER WILL CONT THE DOT IN ARROW DIRECTION
 	contDirection = () => {
 		if(this.props.dotDirection === "left"){
@@ -250,23 +285,19 @@ class DotList extends React.Component {
 	moveDot(evt) {
 		switch (evt.keyCode) {
 			case 37:
-			this.props.changeDirectionLeft();
-			this.contDirection();
+			this.leftArrowPressed();
 			break;
 
 			case 39:
-			this.props.changeDirectionRight();
-			this.contDirection();
+			this.rightArrowPressed();
 			break;
 
 			case 38:
-			this.props.changeDirectionUp();
-			this.contDirection();
+			this.upArrowPressed();
 			break;
 
 			case 40:
-			this.props.changeDirectionDown();
-			this.contDirection();
+			this.downArrowPressed();
 			break;
 
 			case 13:
@@ -282,7 +313,6 @@ class DotList extends React.Component {
 		this.bottomBounds = window.innerHeight * 0.9;
 		this.leftBounds = window.innerWidth * 0.05;
 		this.rightBounds = window.innerWidth * 0.9;
-		console.log('dotlist:', this.props.dotDirection);
 	//map function for creating a new element
 		
 		var dots = this.props.dots;
