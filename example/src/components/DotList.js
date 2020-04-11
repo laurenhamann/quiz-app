@@ -98,7 +98,7 @@ class DotList extends React.Component {
  		this.widthDoubled = this.dotWidth * 2;
  		this.changeDirection();
  		this.fontChanges();
- 		this.props.triggerReset();
+ 		// this.props.triggerReset();
  	}
 
  	fontChanges = () => {
@@ -315,7 +315,7 @@ class DotList extends React.Component {
 		this.rightBounds = window.innerWidth * 0.9;
 	//map function for creating a new element
 		
-		var dots = this.props.dots;
+		var dots = this.props.currentDotArray;
 		var allDots = dots.map((dot, index) => 
 			<Dot 
 				key={index}

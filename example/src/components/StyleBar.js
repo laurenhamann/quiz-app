@@ -14,9 +14,9 @@ function StyleBar(props){
 			<aside className={props.display ? "styleBarBackgroundColor" : "stylebar"}>
 			{window.innerWidth > 700 
 					? 
-			<h2 onClick={props.handleOnClick} style={{top: '0px', left: window.innerWidth - 30 + 'px'}} className={props.default ? "style" : "blackOutStyleBar"}> Style Bar </h2>
+			<h2 onClick={props.handleOnClick} style={props.display ? {color: "#000", top: '0px', left: window.innerWidth - 30 + 'px'} : {top: '0px', left: window.innerWidth - 30 + 'px'}} className={props.default ? "style" : "blackOutStyleBar"}> Style Bar </h2>
 					:
-			<h2 onClick={props.handleOnClick} style={{top: '0px', left: window.innerWidth - 30 + 'px'}} className={props.default ? "style" : "blackOutStyleBar"}> + </h2> }
+			<h2 onClick={props.handleOnClick} style={props.display ? {color: "#000", top: '0px', left: window.innerWidth - 30 + 'px'} : {top: '0px', left: window.innerWidth - 30 + 'px'}} className={props.default ? "style" : "blackOutStyleBar"}> + </h2> }
 				<form style={props.display ? {display: "block", width: "45%"} : {display: "none", width: "10%"}} onSubmit={props.handleSubmit} className="style-bar">
 					<label>
 					Color:

@@ -16,8 +16,8 @@ code {
 /*rid the spacing between dots*/
 p{
 	margin: 0;
-	line-height: 20%;
-	cursor:pointer;
+	line-height: 40%;
+	cursor:default;
 }
 
 /*TOP BAR STYLING*/
