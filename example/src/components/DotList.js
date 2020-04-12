@@ -283,6 +283,12 @@ class DotList extends React.Component {
 
 //THE MOVING DOT EVENT LISTENER
 	moveDot(evt) {
+		if(evt.keyCode === 83 && evt.shiftKey){
+			this.props.selectDotNow();
+			if(evt.keyCode === 37){
+				this.props.selectDotNow();
+			}
+		}
 		switch (evt.keyCode) {
 			case 37:
 			this.leftArrowPressed();

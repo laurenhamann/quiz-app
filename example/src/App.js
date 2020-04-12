@@ -20,10 +20,15 @@ class App extends React.Component{
       undoIndex: 2,
       redoCount: 0,
       undoCount: 0,
+      undoColorCount: 0,
+      redoColorCount: 0,
       disabledRedo: true,
       disabledUndo: true,
       colorUndo: false,
-      undoBtnText: "",
+      colorRedo: false,
+      colorUndoIndex: 1,
+      colorRedoIndex: 1,
+      selectedDots: [],
       //Style Bar State
       display: false,
       color: "#000",
@@ -82,11 +87,14 @@ class App extends React.Component{
     this.changeDirectionDown = this.changeDirectionDown.bind(this);
     this.changeDirectionLeft = this.changeDirectionLeft.bind(this);
     this.changeDirectionRight = this.changeDirectionRight.bind(this);
-    this.selectDot = this.selectDot.bind(this);    
+    this.selectDot = this.selectDot.bind(this);
+    this.selectDotNow = this.selectDotNow.bind(this);    
     this.enter = this.enter.bind(this);
     //TOP BAR FUNCTIONS
     this.handleRedo = this.handleRedo.bind(this);
     this.handleUndo = this.handleUndo.bind(this);
+    this.handleColorUndo = this.handleColorUndo.bind(this);
+    this.handleColorRedo = this.handleColorRedo.bind(this);
     this.handleOnChange = this.handleOnChange.bind(this);
     this.resetButtons = this.resetButtons.bind(this);
     this.resetAll = this.resetAll.bind(this);
@@ -256,6 +264,20 @@ class App extends React.Component{
   }
 
 
+//Select dot with key Press
+  selectDotNow(i){
+    alert('works');
+    const history = this.state.history.slice();
+    const current = history[history.length - 1];
+    const hisIndex = history.indexOf(current);
+    const dotSlice = current.dots.slice();
+    const currentDot = dotSlice[dotSlice.length - 1];
+    const index = dotSlice.indexOf(currentDot);
+    const dotId = document.getElementById(index);
+
+
+  }
+
 //Onclick of dots
   selectDot(event){
     const history = this.state.history.slice();
@@ -268,13 +290,19 @@ class App extends React.Component{
     const index = dotSlice.indexOf(currentDot);
     const dotSelect = dotSlice[selectedDot];
     const currColor = dotSelect.color;
+    const selectedDots = this.state.selectedDots;
 
     if(currColor !== this.state.color){
       history[hisIndex].dots[selectedDot].prevColor = currColor;
       history[hisIndex].dots[selectedDot].color = this.state.color;
-    this.setState({
-      history: history
-    });
+      this.setState({
+        history: history,
+        colorUndo: true,
+        selectedDots: selectedDots.concat([{
+          id: selectedDot,
+          prevColor: currColor,
+          currColor: this.state.color}]),
+      });
     }
   }
 
@@ -317,54 +345,72 @@ class App extends React.Component{
 
 //EVENT FOR UNDO BUTTON IN STYLEBAR TO UNDO THE NEWEST DOT
   handleUndo(event){
-    //ADDS ALL CHANGES TO DOT FROM STYLEBAR TO THE ARRAY
-    this.handleOnChange();
-
-    const history = this.state.history.slice();
-
-  //TRACKING WHICH HISTORY OF DOT TO USE
-    const undoIndex = this.state.undoIndex;
-
-  //GETTING CORRECT DOT HISTORY
-    const current = history[history.length - undoIndex];
-    const lastObjAdded = history.lastIndexOf(current);
-
-  //GETTING VALUE OF THE CORRECT HISTORY SLICE 
-    const dotValue = history[lastObjAdded].dots;
-    const valueOfDot = dotValue.valueOf();
-    console.log(valueOfDot);
-    //TRACKING THE COUNTS
-    const undoCount = this.state.undoCount;
-    this.setState({
-                  history: history.concat([{
-                    dots: valueOfDot
-                  }]),
-                  undoCount: undoCount + 1,
-                  undoIndex: undoIndex + 2,
-                  redoIndex: 2,
-                  disabledRedo: false,
-                });
-
-    this.dotLength = dotValue.length;
-    const currentDot = dotValue[dotValue.length - 1];
-    const index = dotValue.indexOf(currentDot);
-
-    //MAKING THE NEW LATEST DOT BLINKING
-    history[lastObjAdded].dots[index].animation = true;
-
-    const color = history[lastObjAdded].dots[index].color;
-    const text = history[lastObjAdded].dots[index].text;
-    const size = history[lastObjAdded].dots[index].size;
-    const space = history[lastObjAdded].dots[index].space;
-    this.setState({color: color,
-                  text: text,
-                  size: size,
-                  space: space});
-
+      //ADDS ALL CHANGES TO DOT FROM STYLEBAR TO THE ARRAY
+      this.handleOnChange();
+      //TRACKING THE COUNTS
+      const undoCount = this.state.undoCount;
+      const history = this.state.history.slice();
+    //TRACKING WHICH HISTORY OF DOT TO USE
+      const undoIndex = this.state.undoIndex;
+    //GETTING CORRECT DOT HISTORY
+      const current = history[history.length - undoIndex];
+      const lastObjAdded = history.lastIndexOf(current);
+    //GETTING VALUE OF THE CORRECT HISTORY SLICE 
+      const dotValue = history[lastObjAdded].dots;
+      const valueOfDot = dotValue.valueOf();
+      const currentDot = dotValue[dotValue.length - 1];
+      const index = dotValue.indexOf(currentDot);
+        history[lastObjAdded].dots[index].animation = true;
+      const color = history[lastObjAdded].dots[index].color;
+      const text = history[lastObjAdded].dots[index].text;
+      const size = history[lastObjAdded].dots[index].size;
+      const space = history[lastObjAdded].dots[index].space;
+      this.dotLength = dotValue.length;
+      this.setState({
+                    history: history.concat([{
+                      dots: valueOfDot
+                    }]),
+                    undoCount: undoCount + 1,
+                    undoIndex: undoIndex + 2,
+                    redoIndex: 2,
+                    disabledRedo: false,
+                    undoBtnText: "Undo",
+                    color: color,
+                    text: text,
+                    size: size,
+                    space: space
+      });
     //DISABLING THE UNDO BUTTON WHEN LESS THAN 2 DOTS ARE LEFT
     if(this.dotLength < 2){
       this.setState({
-        disabledUndo: true
+        disabledUndo: true,
+
+      });
+    }
+  }
+
+  handleColorUndo(event) {
+    const colorUndoIndex = this.state.colorUndoIndex;
+    const selectedDots = this.state.selectedDots.slice();
+    const lastChanged = selectedDots[selectedDots.length - colorUndoIndex];
+    const currentIndex = selectedDots.indexOf(lastChanged);
+    const dotId = selectedDots[currentIndex].id;
+    const dotPrevColor = selectedDots[currentIndex].prevColor;
+    const history = this.state.history.slice();
+    const currentHistory = history[history.length - 1];
+    const indexOfCurrHistory = history.indexOf(currentHistory);
+      history[indexOfCurrHistory].dots[dotId].color = dotPrevColor;
+    this.setState({
+      history: history,
+      colorUndoIndex: colorUndoIndex + 1,
+      colorRedoIndex: colorUndoIndex,
+      undoColorCount: this.state.undoColorCount + 1,
+      colorRedo: true,
+    });
+    if(this.state.undoColorCount === this.state.selectedDots.length - 1){
+      this.setState({
+          colorUndo: false,
+          colorUndoIndex: 1
       });
     }
   }
@@ -418,6 +464,31 @@ class App extends React.Component{
         this.setState({disabledRedo: true,
                         redoCount: 0,
                         undoCount: 0});
+    }
+  }
+
+
+  handleColorRedo(event) {
+    const colorRedoIndex = this.state.colorRedoIndex;
+    const selectedDots = this.state.selectedDots.slice();
+    const lastChanged = selectedDots[selectedDots.length - colorRedoIndex];
+    const currentIndex = selectedDots.indexOf(lastChanged);
+    const dotId = selectedDots[currentIndex].id;
+    const dotColor = selectedDots[currentIndex].currColor;
+    const history = this.state.history.slice();
+    const currentHistory = history[history.length - 1];
+    const indexOfCurrHistory = history.indexOf(currentHistory);
+      history[indexOfCurrHistory].dots[dotId].color = dotColor;
+    this.setState({
+      history: history,
+      colorRedoIndex: this.state.colorRedoIndex - 1,
+      redoColorCount: this.state.redoColorCount + 1,
+    });
+    if(this.state.colorRedoIndex === 1){
+      this.setState({
+          colorRedo: false,
+          colorRedoIndex: 1
+      });
     }
   }
 
@@ -611,6 +682,10 @@ class App extends React.Component{
             disabledUndo={this.state.disabledUndo}
             default={this.state.default}
             resetAll={this.resetAll}
+            colorUndo={this.state.colorUndo}
+            triggerColorUndo ={this.handleColorUndo}
+            colorRedo={this.state.colorRedo}
+            triggerColorRedo ={this.handleColorRedo}
             />
           </div>
           <DotList 
@@ -632,7 +707,7 @@ class App extends React.Component{
             changeDirectionLeft={this.changeDirectionLeft}
             changeDirectionRight={this.changeDirectionRight}
             dotDirection={dotDirection}
-            selectDot={this.selectDot}             
+            selectDotNow={this.selectDotNow}             
             /> 
             
         </React.Fragment>

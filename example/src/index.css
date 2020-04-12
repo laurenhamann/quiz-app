@@ -54,6 +54,12 @@ p{
 	border:none;
 }
 
+.undoColorVisable{
+	opacity: 1;
+}
+.undoColorNotVisable{
+	opacity: 0;
+}
 .undoAbled:hover,
 .redoAbled:hover{
 	font-weight: bold;
