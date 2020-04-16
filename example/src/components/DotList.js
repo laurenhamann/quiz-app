@@ -19,9 +19,11 @@ class DotList extends React.Component {
 //CHANGES MADE AS THEY HAPPEN
 	componentDidUpdate() {
 		this.handleDotChange();
+		this.d = document.getElementById(this.props.currentDot);
+		this.prevNode = document.getElementById(this.props.prevIndex);
 		this.updatePosition();
- 		this.d = document.getElementById(this.props.currentDot);
  		this.props.triggerPositioning();
+
 	}
 
 	componentWillUnmount() {
@@ -85,7 +87,7 @@ class DotList extends React.Component {
 	updatePosition = () => {
 		this.screenHeight = window.innerHeight;
 		this.screenWidth = window.innerWidth;
-		this.leftPosition = parseFloat(this.d.style.left);
+ 		this.leftPosition = parseFloat(this.d.style.left);
 		this.topPosition = parseFloat(this.d.style.top);
 	}
 
@@ -93,7 +95,8 @@ class DotList extends React.Component {
 //GETTING THE CURRENT DOT POSITIONING AND SETTING TO REUSABLE VARIABLES	
  	getDotPosition = () => {
  		this.d = document.getElementById(this.props.currentDot);
- 		this.prevNode = this.d.previousSibling === null ? this.d : this.d.previousSibling;
+ 		this.prevDot = document.getElementById(this.props.prevIndex);
+ 		this.prevNode = this.prevDot === null ? this.d : this.prevDot;
  		this.dotHeight = this.d.offsetHeight;
  		this.widthDoubled = this.dotWidth * 2;
  		this.changeDirection();
@@ -283,12 +286,6 @@ class DotList extends React.Component {
 
 //THE MOVING DOT EVENT LISTENER
 	moveDot(evt) {
-		if(evt.keyCode === 83 && evt.shiftKey){
-			this.props.selectDotNow();
-			if(evt.keyCode === 37){
-				this.props.selectDotNow();
-			}
-		}
 		switch (evt.keyCode) {
 			case 37:
 			this.leftArrowPressed();
@@ -319,6 +316,7 @@ class DotList extends React.Component {
 		this.bottomBounds = window.innerHeight * 0.9;
 		this.leftBounds = window.innerWidth * 0.05;
 		this.rightBounds = window.innerWidth * 0.9;
+
 	//map function for creating a new element
 		
 		var dots = this.props.currentDotArray;

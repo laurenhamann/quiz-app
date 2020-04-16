@@ -56,9 +56,11 @@ p{
 
 .undoColorVisable{
 	opacity: 1;
+	width: 50px;
 }
 .undoColorNotVisable{
 	opacity: 0;
+	max-width:1px;
 }
 .undoAbled:hover,
 .redoAbled:hover{
