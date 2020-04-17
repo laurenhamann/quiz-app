@@ -85,6 +85,7 @@ class DotList extends React.Component {
 
 //CONSTANT UPDATE OF POSITION
 	updatePosition = () => {
+		console.log(this.d);
 		this.screenHeight = window.innerHeight;
 		this.screenWidth = window.innerWidth;
  		this.leftPosition = parseFloat(this.d.style.left);
