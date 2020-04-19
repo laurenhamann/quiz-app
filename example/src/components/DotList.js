@@ -23,7 +23,6 @@ class DotList extends React.Component {
 		this.prevNode = document.getElementById(this.props.prevIndex);
 		this.updatePosition();
  		this.props.triggerPositioning();
-
 	}
 
 	componentWillUnmount() {
@@ -85,7 +84,6 @@ class DotList extends React.Component {
 
 //CONSTANT UPDATE OF POSITION
 	updatePosition = () => {
-		console.log(this.d);
 		this.screenHeight = window.innerHeight;
 		this.screenWidth = window.innerWidth;
  		this.leftPosition = parseFloat(this.d.style.left);
@@ -98,8 +96,6 @@ class DotList extends React.Component {
  		this.d = document.getElementById(this.props.currentDot);
  		this.prevDot = document.getElementById(this.props.prevIndex);
  		this.prevNode = this.prevDot === null ? this.d : this.prevDot;
- 		this.dotHeight = this.d.offsetHeight;
- 		this.widthDoubled = this.dotWidth * 2;
  		this.changeDirection();
  		this.fontChanges();
  		// this.props.triggerReset();
@@ -332,6 +328,7 @@ class DotList extends React.Component {
 				font={dot.size}
 				shape={dot.text}
 				selectDot={this.props.selectDot}
+				selectDotFunction={this.props.selectDotFunction}
 			/>
 		);
 		return (

@@ -28,8 +28,6 @@ p{
 
 .lgRow {
 	display:flex;
-	flex-direction: row;
-	justify-content: space-between;
 }
 
 .Buttons{
@@ -40,12 +38,19 @@ p{
 .lgButtons{
 	display:flex;
 	flex-direction: row;
+	justify-content: space-between;
+}
+
+.lgButtonsColor{
+	display:flex;
+	flex-direction: row;
 	margin-right: 5%;
 }
 
 .lgButtons .button{
 	width:60px;
 }
+
 
 
 .undo, 
@@ -60,7 +65,6 @@ p{
 }
 .undoColorNotVisable{
 	opacity: 0;
-	max-width:1px;
 }
 .undoAbled:hover,
 .redoAbled:hover{
