@@ -1,7 +1,6 @@
 import React from 'react';
 import DotList from './components/DotList';
 import StyleBar from './components/StyleBar';
-import TopBar from './components/TopBar';
 
 class App extends React.Component{
   constructor(props){
@@ -84,7 +83,6 @@ class App extends React.Component{
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.handleDotPosition = this.handleDotPosition.bind(this);
-    this.changeDotPositionState = this.changeDotPositionState.bind(this);
     this.changeDirectionUp = this.changeDirectionUp.bind(this);
     this.changeDirectionDown = this.changeDirectionDown.bind(this);
     this.changeDirectionLeft = this.changeDirectionLeft.bind(this);
@@ -97,7 +95,6 @@ class App extends React.Component{
     this.handleColorUndo = this.handleColorUndo.bind(this);
     this.handleColorRedo = this.handleColorRedo.bind(this);
     this.handleOnChange = this.handleOnChange.bind(this);
-    this.resetButtons = this.resetButtons.bind(this);
     this.resetAll = this.resetAll.bind(this);
     //STYLE BAR FUNCTIONS
     this.handleOpenOnClick = this.handleOpenOnClick.bind(this);
@@ -157,12 +154,6 @@ class App extends React.Component{
       
     }
 
-
-//GET STATE OF DOT DIRECTION
- getDotDirection() {
-    this.dotDirection = this.currentDot.dotDirection;
- }
-
 //ALWAYS GETTING POSITION OF DOT IN DOTLIST COMPONENTUPDATE
   handleDotPosition() {
     this.dotNow = document.getElementById(this.indexOfDot);
@@ -170,6 +161,18 @@ class App extends React.Component{
     this.top = parseFloat(this.dotNow.style.top);
   }
 
+  getCurrAndPrevDotIndex() {
+    this.history = this.state.history.slice();
+    this.current = this.history[this.history.length - 1];
+    this.hisIndex = this.history.indexOf(this.current);
+    this.currentDotArray = this.current.dots.slice();
+    this.indexOfDot = this.index === undefined  ? this.currentDotArray.length - 1 : this.index;
+    this.prevIndex = this.state.selectedDots;
+    this.currentDot = this.currentDotArray[this.indexOfDot];
+    this.prevDot = this.currentDotArray[this.prevIndex];
+    this.indexOfCurrentDot = this.currentDotArray.indexOf(this.currentDot);
+    this.indexOfPrevDot = this.currentDotArray.indexOf(this.prevDot);
+  }
 
 //CHANGING LEFT AND TOP STATE ON KEY MOVES
   changeDotPositionState() {
@@ -194,9 +197,6 @@ class App extends React.Component{
     const history = this.state.history.slice();
     const current = history[history.length - 1];
     const hisIndex = history.indexOf(current);
-    const dotSlice = current.dots.slice();
-    const currentDot = dotSlice[this.indexOfDot];
-    const index = dotSlice.indexOf(currentDot);
       history[hisIndex].dots[this.indexOfDot].dotDirection = 'down';
     this.setState({
       history: history
@@ -211,9 +211,6 @@ class App extends React.Component{
     const history = this.state.history.slice();
     const current = history[history.length - 1];
     const hisIndex = history.indexOf(current);
-    const dotSlice = current.dots.slice();
-    const currentDot = dotSlice[this.indexOfDot];
-    const index = dotSlice.indexOf(currentDot);
       history[hisIndex].dots[this.indexOfDot].dotDirection = 'right';
     this.setState({
       history: history
@@ -228,9 +225,6 @@ class App extends React.Component{
     const history = this.state.history.slice();
     const current = history[history.length - 1];
     const hisIndex = history.indexOf(current);
-    const dotSlice = current.dots.slice();
-    const currentDot = dotSlice[this.index];
-    const index = dotSlice.indexOf(currentDot);
       history[hisIndex].dots[this.indexOfDot].dotDirection = 'left';
     this.setState({
       history: history
@@ -245,9 +239,6 @@ class App extends React.Component{
     const history = this.state.history.slice();
     const current = history[history.length - 1];
     const hisIndex = history.indexOf(current);
-    const dotSlice = current.dots.slice();
-    const currentDot = dotSlice[this.indexOfDot];
-    const index = dotSlice.indexOf(currentDot);
       history[hisIndex].dots[this.indexOfDot].dotDirection = 'up';
     this.setState({
       history: history
@@ -268,12 +259,7 @@ class App extends React.Component{
     const hisIndex = history.indexOf(current);
     const dotSlice = current.dots.slice();
     const currentDot = dotSlice[dotSlice.length - 1];
-    const prevDot = dotSlice[dotSlice.length - 2];
     const index = dotSlice.indexOf(currentDot);
-    const indexPrev = dotSlice.indexOf(prevDot);
-    const dotSelect = dotSlice[selectedDot];
-    const currColor = dotSelect.color;
-    const selectedDots = this.state.selectedDots;
         history[hisIndex].dots[selectedDot].animation = true;
         history[hisIndex].dots[index].animation = false;
       this.setState({
@@ -293,7 +279,6 @@ class App extends React.Component{
     const history = this.state.history.slice();
     const current = history[history.length - 1];
     const hisIndex = history.indexOf(current);
-    const currColor = history[hisIndex].dots[this.indexOfDot].color;
     const color = this.state.color;
       history[hisIndex].dots[this.indexOfDot].prevColor = history[hisIndex].dots[this.indexOfDot].prevColor.concat([{
           prevColor: color
@@ -322,7 +307,7 @@ class App extends React.Component{
 //ON ENTER PRESS 
   enter(evt) {
     if(evt.keyCode === 13){
-      this.getDotDirection();
+      this.dotDirection = this.currentDot.dotDirection;
       const history = this.state.history.slice();
       const current = history[history.length - 1];
       const hisIndex = history.indexOf(current);
@@ -330,11 +315,6 @@ class App extends React.Component{
       const indexOfDot = this.index === undefined ? 0 : this.index;
       const currentDot = dotSlice[indexOfDot];
       const index = dotSlice.indexOf(currentDot);
-      // const indexOfPrevDot = this.prevIndex === undefined ? 0 : this.prevIndex;
-      // const prevDot = dotSlice[indexOfPrevDot];
-      // const indexPrev = dotSlice.indexOf(prevDot);
-      console.log(indexOfDot);
-      console.log(this.prevIndex);
         history[hisIndex].dots[index].animation = false;
         history[hisIndex].dots[index].left = this.left;
         history[hisIndex].dots[index].top = this.top;
@@ -393,7 +373,6 @@ class App extends React.Component{
       });
 
       if(this.index < 2) {
-        console.log('ran');
         this.setState({
           disabledUndo: true,
           selectMode: false,
@@ -414,15 +393,13 @@ class App extends React.Component{
     //GETTING VALUE OF THE CORRECT HISTORY SLICE 
       const dotValue = history[lastObjAdded].dots;
       const valueOfDot = dotValue.valueOf();
-      const currentDot = dotValue[dotValue.length - 1];
-      const index = dotValue.indexOf(currentDot);
-
         history[lastObjAdded].dots[this.indexOfPrevDot].animation = true;
       const color = history[lastObjAdded].dots[this.indexOfPrevDot].color;
       const text = history[lastObjAdded].dots[this.indexOfPrevDot].text;
       const size = history[lastObjAdded].dots[this.indexOfPrevDot].size;
       const space = history[lastObjAdded].dots[this.indexOfPrevDot].space;
       this.dotLength = dotValue.length;
+      console.log(color);
       this.setState({
                     history: history.concat([{
                       dots: valueOfDot
@@ -465,13 +442,10 @@ class App extends React.Component{
     const lastObjAdded = history.indexOf(current);
 
   //GETTING VALUE OF THE CORRECT HISTORY SLICE 
-    const value = history[lastObjAdded].valueOf();
     const dotValue = history[lastObjAdded].dots.slice();
     const valueOfDot = dotValue.valueOf();
 
 
-    const currentDot = dotValue[this.indexOfDot];
-    const index = dotValue.indexOf(currentDot);
     const indexPrev = this.prevIndex;
     const color = history[lastObjAdded].dots[indexPrev].color;
     const text = history[lastObjAdded].dots[indexPrev].text;
@@ -562,7 +536,7 @@ class App extends React.Component{
   }
 
 
-//SETS STATE WHEN UNDO BUTTON IS CLICKED
+//SETS STATE OF THE UNDID DOT WHEN UNDO BUTTON IS CLICKED
   handleOnChange() {
     const slice = this.state.history.slice();
     const current = slice[slice.length - 1];
@@ -574,26 +548,16 @@ class App extends React.Component{
     const text = slice[index].dots[indexCurr].text;
     const size = slice[index].dots[indexCurr].size;
     const space = slice[index].dots[indexCurr].space;
-
+    console.log(color);
     if(index >= 1){
       slice[index].dots[indexCurr].left = this.left;
       slice[index].dots[indexCurr].top = this.top;
-      const currentState = { left: this.left,
-                              top: this.top
-                                }
       this.setState({history: slice,
                      color: color,
                      text: text,
                      size: size,
                      space: space });
     }
-  }
-
-//Resetting state for redoCount and UNDOCOUNT
-  resetButtons() {
-    this.setState({undoCount: 0,
-                    redoCount: 0,
-                    disabledRedo: true});
   }
 
   resetAll(){
@@ -616,7 +580,6 @@ class App extends React.Component{
     const history = this.state.history.slice();
     const current = history[history.length - 1];
     const hisIndex = history.indexOf(current);
-    const currColor = history[hisIndex].dots[this.indexOfDot].color;
     const color = this.state.color;
       history[hisIndex].dots[this.indexOfDot].prevColor = history[hisIndex].dots[this.indexOfDot].prevColor.concat([{
           prevColor: color
@@ -633,7 +596,6 @@ class App extends React.Component{
     const history = this.state.history.slice();
     const current = history[history.length - 1];
     const hisIndex = history.indexOf(current);
-    const currColor = history[hisIndex].dots[this.indexOfDot].color;
     const color = this.state.color;
       history[hisIndex].dots[this.indexOfDot].prevColor = history[hisIndex].dots[this.indexOfDot].prevColor.concat([{
           prevColor: color
@@ -725,27 +687,13 @@ class App extends React.Component{
 
   render(){
     this.getSelectedDot();
+
+  //Setting Left position for start button
     const halfWidth = window.innerWidth / 2;
     const leftButton = halfWidth - 104.6485;
-    this.history = this.state.history.slice();
-    this.current = this.history[this.history.length - 1];
-    this.hisIndex = this.history.indexOf(this.current);
-    this.currentDotArray = this.current.dots.slice();
-    this.indexOfDot = this.index === undefined  ? this.currentDotArray.length - 1 : this.index;
-    this.prevIndex = this.state.selectedDots;
-    this.currentDot = this.currentDotArray[this.indexOfDot];
-    this.prevDot = this.currentDotArray[this.prevIndex];
-    this.indexOfCurrentDot = this.currentDotArray.indexOf(this.currentDot);
-    this.indexOfPrevDot = this.currentDotArray.indexOf(this.prevDot);
-    const dotDirection = this.dotDirection;
-    const newColor = this.state.color;
-    const newSize = this.state.size;
-    const newSpace = this.state.space;
-    const prevStateSpace = this.state.prevSpace;
-    const palette = this.state.palette;
-    const undoCount = this.state.undoCount;
 
-    
+  //Getting current previous index of dots
+    this.getCurrAndPrevDotIndex();
 
     return(<div style={{width: this.state.width, height: this.state.height, backgroundColor: this.state.backgroundColor}} id="board">
       
@@ -753,56 +701,55 @@ class App extends React.Component{
       {this.state.game ? (
         <React.Fragment>
           <StyleBar 
+            handleOnClick={this.handleOpenOnClick}
+            blackOut={this.blackOut}
             triggerColorChange={this.handleColorChange}
             triggerSizeChange={this.handleSizeChange}
             triggerSpaceChange={this.handleSpaceChange}
             triggerShapeChange={this.handleShapeChange}
             triggerSaveColor={this.handleClickSaveColor}
             randomColor={this.handleRandomColor}
-            size={newSize}
-            space={newSpace}
-            color={newColor}
-            palette={palette}
-            handleOnClick={this.handleOpenOnClick}
-            display={this.state.display}
-            text={this.props.text}
-            blackOut={this.blackOut}
-            default={this.state.default}
             randomBackgroundColor={this.handleBackgroundRandomColor}
-            backgroundColor={this.state.backgroundColor}
             handleSubmit={this.handleSubmit}
             triggerUndo={this.handleUndo}
             triggerRedo={this.handleRedo}
+            triggerColorUndo ={this.handleColorUndo}
+            triggerColorRedo ={this.handleColorRedo}
+            resetAll={this.resetAll}
+            size={this.state.size}
+            space={this.state.space}
+            color={this.state.color}
+            palette={this.state.palette}
+            display={this.state.display}
+            text={this.state.text}
+            default={this.state.default}
+            backgroundColor={this.state.backgroundColor}
             disabledRedo={this.state.disabledRedo}
             disabledUndo={this.state.disabledUndo}
-            resetAll={this.resetAll}
             colorUndo={this.state.colorUndo}
-            triggerColorUndo ={this.handleColorUndo}
             colorRedo={this.state.colorRedo}
-            triggerColorRedo ={this.handleColorRedo}
+            width={this.state.width}
+            height={this.state.height} 
              />
           <DotList 
-            color={newColor}
-            size={newSize}
-            space={newSpace}
-            prevSpace={prevStateSpace}
-            text={this.state.text}
-            addDot={this.handleAddDot}
-            enter={this.enter}
             triggerPositioning={this.handleDotPosition}
-            currentDot={this.indexOfCurrentDot}
-            undoCount={undoCount}
-            triggerReset={this.resetButtons}
-            undoDisabled={this.state.disabledUndo}
-            currentDotArray={this.currentDotArray}
             changeDirectionDown={this.changeDirectionDown}
             changeDirectionUp={this.changeDirectionUp}
             changeDirectionLeft={this.changeDirectionLeft}
             changeDirectionRight={this.changeDirectionRight}
-            dotDirection={dotDirection}
-            selectDot={this.selectDot} 
-            selectDotFunction={this.state.selectDot}
-            prevIndex={this.indexOfPrevDot}            
+            selectDotFunction={this.selectDot}
+            color={this.state.color}
+            size={this.state.size}
+            space={this.state.space}
+            prevSpace={this.state.prevSpace}
+            text={this.state.text}
+            currentDot={this.indexOfCurrentDot}
+            currentDotArray={this.currentDotArray}
+            dotDirection={this.dotDirection} 
+            selectDot={this.state.selectDot}
+            prevIndex={this.indexOfPrevDot} 
+            width={this.state.width}
+            height={this.state.height}           
             /> 
             
         </React.Fragment>

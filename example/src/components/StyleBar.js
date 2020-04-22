@@ -12,7 +12,7 @@ function StyleBar(props){
 	return(
 		<header className={"ParentTb"} style={{width: 100 + '%'}}>
 			<aside className={props.display ? "SBColorOpened" : ""}>
-			{window.innerWidth > 700 
+			{props.width > 800 
 					? 
 			<h2 onClick={props.handleOnClick} style={props.display ? {color: "#000"} : {}} className={props.default ? "style" : "SBBlackoutTitle"}> Style Bar </h2>
 					:
@@ -70,7 +70,7 @@ function StyleBar(props){
 			</aside>
 
 			<h1 className="title" style={props.default ? {color: "#000000"} : {color: "#ffffff"}}> Dot Game </h1>
-				<div className={window.innerWidth > 700 ? "TbButtonsLarge" : "TbButtonsSmall"}>
+				<div className={props.width > 800 ? "TbButtonsLarge" : "TbButtonsSmall"}>
 					<button onClick={props.triggerUndo} disabled={props.disabledUndo}className={props.disabledUndo ? "undo button" : "btnAbled undo button"} style={props.default ? {color: "#000000", background: "none"} : {color: "#ffffff", background: "#000000"}}>Undo</button>
 					<button onClick={props.triggerRedo} disabled={props.disabledRedo} className={props.disabledRedo ? "redo button" : "btnAbled redo button"} style={props.default ? {color: "#000000", background: "none"} : {color: "#ffffff", background: "#000000"}}> Redo </button>
 					<button onClick={props.resetAll} className="reset button btnAbled" style={props.default ? {color: "#000000", background: "none"} : {color: "#ffffff", background: "#000000"}}> Reset </button>

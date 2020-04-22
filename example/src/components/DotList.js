@@ -84,8 +84,6 @@ class DotList extends React.Component {
 
 //CONSTANT UPDATE OF POSITION
 	updatePosition = () => {
-		this.screenHeight = window.innerHeight;
-		this.screenWidth = window.innerWidth;
  		this.leftPosition = parseFloat(this.d.style.left);
 		this.topPosition = parseFloat(this.d.style.top);
 	}
@@ -96,9 +94,8 @@ class DotList extends React.Component {
  		this.d = document.getElementById(this.props.currentDot);
  		this.prevDot = document.getElementById(this.props.prevIndex);
  		this.prevNode = this.prevDot === null ? this.d : this.prevDot;
- 		this.changeDirection();
+ 		//this.changeDirection();
  		this.fontChanges();
- 		// this.props.triggerReset();
  	}
 
  	fontChanges = () => {
@@ -158,15 +155,6 @@ class DotList extends React.Component {
  	curveDown = () => {
  		this.prevNode.style.top = (parseFloat(this.prevNode.style.top) - this.newCurve) - this.dotSpace + 'px';
  	}
-
-
-//CHANGING STATE DEPENDANT ON UNDOCOUNT
-	changeDirection = () => {
-		if(this.props.undoCount > 0){
-			this.handleDotChange();
-			this.props.triggerReset();
-		}
-	}
  	
 //MOVING THE DOT RIGHT
  	movingRight = () =>{
@@ -309,10 +297,10 @@ class DotList extends React.Component {
 
 	render() {
 	//BOUNDARIES FOR THE SCREENSIZE
-		this.topBounds = window.innerHeight * 0.2;
-		this.bottomBounds = window.innerHeight * 0.9;
-		this.leftBounds = window.innerWidth * 0.05;
-		this.rightBounds = window.innerWidth * 0.9;
+		this.topBounds = this.props.height * 0.2;
+		this.bottomBounds = this.props.height * 0.9;
+		this.leftBounds = this.props.width * 0.05;
+		this.rightBounds = this.props.width * 0.9;
 
 	//map function for creating a new element
 		
@@ -327,8 +315,8 @@ class DotList extends React.Component {
 				color={dot.color}
 				font={dot.size}
 				shape={dot.text}
-				selectDot={this.props.selectDot}
 				selectDotFunction={this.props.selectDotFunction}
+				selectDot={this.props.selectDot}
 			/>
 		);
 		return (
