@@ -752,7 +752,6 @@ class App extends React.Component{
 
       {this.state.game ? (
         <React.Fragment>
-          <div className="Header">
           <StyleBar 
             triggerColorChange={this.handleColorChange}
             triggerSizeChange={this.handleSizeChange}
@@ -772,21 +771,16 @@ class App extends React.Component{
             randomBackgroundColor={this.handleBackgroundRandomColor}
             backgroundColor={this.state.backgroundColor}
             handleSubmit={this.handleSubmit}
-             />
-            <TopBar 
-            style={this.state.display === true ? {width: "50%"} : {width: "10%"}}
             triggerUndo={this.handleUndo}
             triggerRedo={this.handleRedo}
             disabledRedo={this.state.disabledRedo}
             disabledUndo={this.state.disabledUndo}
-            default={this.state.default}
             resetAll={this.resetAll}
             colorUndo={this.state.colorUndo}
             triggerColorUndo ={this.handleColorUndo}
             colorRedo={this.state.colorRedo}
             triggerColorRedo ={this.handleColorRedo}
-            />
-          </div>
+             />
           <DotList 
             color={newColor}
             size={newSize}

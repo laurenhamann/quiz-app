@@ -21,77 +21,68 @@ p{
 }
 
 /*TOP BAR STYLING*/
-.TopBar{
-	display:flex;
-	flex-direction: column;
-}
 
-.lgRow {
-	display:flex;
-}
-
-.Buttons{
-	display:flex;
-	flex-direction: column;
-}
-
-.lgButtons{
+.ParentTb {
 	display:flex;
 	flex-direction: row;
 	justify-content: space-between;
 }
 
-.lgButtonsColor{
+.TbButtonsSmall{
+	display:flex;
+	flex-direction: column;
+	margin-right: 5px;
+}
+
+.TbButtonsLarge{
 	display:flex;
 	flex-direction: row;
-	margin-right: 5%;
+	margin-right: 5px;
+	height:20px;
 }
 
-.lgButtons .button{
-	width:60px;
-}
-
-
-
-.undo, 
-.redo{
+.button{
+	outline: none;
 	padding-right:1%;
 	border:none;
 }
 
-.undoColorVisable{
-	opacity: 1;
-	width: 50px;
+
+.TbButtonsSmall .button{
+	font-size:14px;
 }
-.undoColorNotVisable{
-	opacity: 0;
+
+.button:disabled{
+	color: #ccc !important;
 }
-.undoAbled:hover,
-.redoAbled:hover{
-	font-weight: bold;
+
+.btnAbled:hover{
+	animation-name: circleBlinking;
+   	animation-duration: .9s;
+   	animation-iteration-count: infinite;
 }
 
 .title{
-	margin-right: auto;
-	margin-left: auto;
-	margin-top: 0px;
+	font-size: 32px;
+	height:30px;
+	margin-left: 75px;
 }
 
 /*STYLE BAR*/
-.stylebar{
-	float:left;
+
+.SBColorOpened{
+	background-color: #eee
 }
 
-.styleBarBackgroundColor{
-	float:left;
-	background-color: #eee
+.SBColorClosed{
+	background-color: #fff;
 }
 
 .style-bar{
 	background-color: #eee
 }
 
-.blackOutStyleBar{
+.SBBlackoutTitle{
 	background-color: none;
 	color:#fff;
 }
@@ -108,19 +99,6 @@ p{
 .subtractBtn, .additionBtn {
 	margin-left: 8px;
 	margin-right: 8px;
-}
-/*class for the div*/
-
-.center-dot{
-	position:absolute;
-	top:50%;
-	left:50%;
-}
-
-.allDots{
-	display:flex;
-	flex-wrap: wrap;
-	flex-direction: column;
 }
 
 

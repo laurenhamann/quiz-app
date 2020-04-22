@@ -10,14 +10,14 @@ function StyleBar(props){
 			value={palette.color} />
 	)
 	return(
-		<React.Fragment>
-			<aside className={props.display ? "styleBarBackgroundColor" : "stylebar"}>
+		<header className={"ParentTb"} style={{width: 100 + '%'}}>
+			<aside className={props.display ? "SBColorOpened" : ""}>
 			{window.innerWidth > 700 
 					? 
-			<h2 onClick={props.handleOnClick} style={props.display ? {color: "#000", top: '0px', left: window.innerWidth - 30 + 'px'} : {top: '0px', left: window.innerWidth - 30 + 'px'}} className={props.default ? "style" : "blackOutStyleBar"}> Style Bar </h2>
+			<h2 onClick={props.handleOnClick} style={props.display ? {color: "#000"} : {}} className={props.default ? "style" : "SBBlackoutTitle"}> Style Bar </h2>
 					:
-			<h2 onClick={props.handleOnClick} style={props.display ? {color: "#000", top: '0px', left: window.innerWidth - 30 + 'px'} : {top: '0px', left: window.innerWidth - 30 + 'px'}} className={props.default ? "style" : "blackOutStyleBar"}> + </h2> }
-				<form style={props.display ? {display: "block", width: "45%"} : {display: "none", width: "10%"}} onSubmit={props.handleSubmit} className="style-bar">
+			<h2 onClick={props.handleOnClick} style={props.display ? {color: "#000"} : {}} className={props.default ? "style" : "SBBlackoutTitle"}> + </h2> }
+				<form style={props.display ? {display: "block", width: "35%"} : {display: "none", width: "10%"}} onSubmit={props.handleSubmit} className="style-bar">
 					<label>
 					Color:
 						<input type="text" value={props.color} onChange={props.triggerColorChange} /><br />
@@ -68,7 +68,17 @@ function StyleBar(props){
 				</form>
 
 			</aside>
-		</React.Fragment>
+
+			<h1 className="title" style={props.default ? {color: "#000000"} : {color: "#ffffff"}}> Dot Game </h1>
+				<div className={window.innerWidth > 700 ? "TbButtonsLarge" : "TbButtonsSmall"}>
+					<button onClick={props.triggerUndo} disabled={props.disabledUndo}className={props.disabledUndo ? "undo button" : "btnAbled undo button"} style={props.default ? {color: "#000000", background: "none"} : {color: "#ffffff", background: "#000000"}}>Undo</button>
+					<button onClick={props.triggerRedo} disabled={props.disabledRedo} className={props.disabledRedo ? "redo button" : "btnAbled redo button"} style={props.default ? {color: "#000000", background: "none"} : {color: "#ffffff", background: "#000000"}}> Redo </button>
+					<button onClick={props.resetAll} className="reset button btnAbled" style={props.default ? {color: "#000000", background: "none"} : {color: "#ffffff", background: "#000000"}}> Reset </button>
+					<button onClick={props.triggerColorUndo} disabled={!props.colorUndo} className={!props.colorUndo ? "undo button" : "btnAbled undo button"} style={props.default ? {color: "#000000", background: "none"} : {color: "#ffffff", background: "#000000"}}>Undo Color</button>
+					<button onClick={props.triggerColorRedo} disabled={!props.colorRedo} className={!props.colorRedo ? "undo button" : "btnAbled undo button"} style={props.default ? {color: "#000000", background: "none"} : {color: "#ffffff", background: "#000000"}}>Redo Color</button>					
+				</div>
+				
+		</header>
 	);
 }
 
