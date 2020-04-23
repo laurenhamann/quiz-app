@@ -9,6 +9,13 @@ function StyleBar(props){
 			onClick={props.triggerColorChange}
 			value={palette.color} />
 	)
+	const colorPalette = props.compColorPalette;
+	const colorPaletteDiv = colorPalette.map((palette, index) =>
+		<button key={index} 
+			style={{backgroundColor: palette, width: "10px", height:"10px", borderRadius: "50px"}}
+			onClick={props.triggerColorChange}
+			value={palette} />
+	)
 	return(
 		<header className={"ParentTb"} style={{width: 100 + '%'}}>
 			<aside className={props.display ? "SBColorOpened" : ""}>
@@ -25,6 +32,9 @@ function StyleBar(props){
 						<button className="randomColor" onClick={props.randomColor} style={{backgroundColor: props.color, color: props.backgroundColor}} value={props.color}> Random Color </button>
 						<button className="save" onClick={props.triggerSaveColor} value={props.color}> Save </button>
 						<br />{paletteDiv}
+						<br />
+						<button className="createPalette" onClick={props.triggerCompColor} disabled={!props.createPalette} value={props.compColorPalette}> Create Palette </button>
+						<br />{colorPaletteDiv}
 
 
 					</label>

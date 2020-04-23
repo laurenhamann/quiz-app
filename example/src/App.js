@@ -15,6 +15,7 @@ class App extends React.Component{
       selectedDots: 0,
       default: true,
       backgroundColor: "#ffffff",
+      clickCountPalette: 1,
       //Top Bar State
       redoIndex: 2,
       undoIndex: 2,
@@ -30,6 +31,30 @@ class App extends React.Component{
       colorUndoIndex: 1,
       colorRedoIndex: 1,
       selectDot: true,
+      createPalette: false,
+      compColorPalette: ["#63b598",
+                        "#b56380"],
+      colorPalettes:[{
+            mint:[{ 
+            palette: ["#F8C7CC", 
+                    "#63B598",
+                    "#57886C",
+                    "#466060",
+                    "#0e0f19"]},
+            {palette: [ "#e56399",
+                        "#63B598",
+                        "#d3a588",
+                        "#ece2d0",
+                        "#7a6563" ]},
+            {palette: ["#6da34d",
+                        "#63B598",
+                        "#56445d",
+                        "#548687",
+                        "#c5e99b"]},
+            {palette: ["#63b598",
+                        "#b56380"]
+            }],
+      }],
       //Style Bar State
       display: false,
       color: "#000000",
@@ -87,6 +112,7 @@ class App extends React.Component{
     this.changeDirectionDown = this.changeDirectionDown.bind(this);
     this.changeDirectionLeft = this.changeDirectionLeft.bind(this);
     this.changeDirectionRight = this.changeDirectionRight.bind(this);
+    this.handleCreatePalette = this.handleCreatePalette.bind(this);
     this.selectDot = this.selectDot.bind(this);
     this.enter = this.enter.bind(this);
     //TOP BAR FUNCTIONS
@@ -107,6 +133,7 @@ class App extends React.Component{
     this.handleSubmit = this.handleSubmit.bind(this);
     this.blackOut = this.blackOut.bind(this);
     this.handleBackgroundRandomColor = this.handleBackgroundRandomColor.bind(this);
+    this.createPalette = this.createPalette.bind(this);
   }
   componentDidMount() {
     this.handleAddDot();
@@ -287,6 +314,39 @@ class App extends React.Component{
     this.setState({
       history: history
     });
+    this.createPalette();
+  }
+
+
+  createPalette() {
+      this.setState({
+        createPalette: true
+      });
+  }
+
+  handleCreatePalette() {
+    const color = this.state.color;
+    if(color){
+
+      const colorPalette = this.state.colorPalettes;
+      const current = colorPalette[colorPalette.length - 1];
+      const colorIndex = colorPalette.indexOf(current);
+      const genPalette = colorPalette[colorIndex].mint;
+      const clickCountPalette = this.state.clickCountPalette;
+      const currentColorPalette = genPalette[genPalette.length - clickCountPalette];
+      const paletteIndex = genPalette.indexOf(currentColorPalette);
+      const generate = colorPalette[colorIndex].mint[paletteIndex].palette;
+      this.setState({
+        compColorPalette: generate,
+        clickCountPalette: clickCountPalette + 1,
+      });
+      if(clickCountPalette === genPalette.length){
+        this.setState({
+          clickCountPalette: 1
+        });
+      }
+      console.log(generate);
+    }
   }
 
   getSelectedDot(){
@@ -588,6 +648,7 @@ class App extends React.Component{
     this.setState({ history: history,
                     color: event.target.value,
                     colorUndo: true });
+    this.createPalette();
   }
 
 //EVENT FOR BUTTON IN STYLEBAR TO CHANGE DOT TO RANDOMCOLOR
@@ -604,6 +665,7 @@ class App extends React.Component{
     this.setState({ history: history,
                     color: this.randomColor,
                     colorUndo: true});
+    this.createPalette();
   }
 
 
@@ -658,6 +720,7 @@ class App extends React.Component{
       };
     });
   }
+
 
   handleSubmit(event){
     event.preventDefault();
@@ -722,6 +785,9 @@ class App extends React.Component{
             palette={this.state.palette}
             display={this.state.display}
             text={this.state.text}
+            createPalette={this.state.createPalette}
+            triggerCompColor={this.handleCreatePalette}
+            compColorPalette={this.state.compColorPalette}
             default={this.state.default}
             backgroundColor={this.state.backgroundColor}
             disabledRedo={this.state.disabledRedo}
