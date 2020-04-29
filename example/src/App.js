@@ -51,7 +51,6 @@ class App extends React.Component{
     this.exitReset = this.exitReset.bind(this);
     this.resetAsk = this.resetAsk.bind(this);
     this.random = this.random.bind(this);
-    this.colorChange = this.colorChange.bind(this);
     //TOP BAR FUNCTIONS
     this.handleRedo = this.handleRedo.bind(this);
     this.handleUndo = this.handleUndo.bind(this);
@@ -233,23 +232,8 @@ class App extends React.Component{
     this.setState({
         selectedDots: this.index
     });
-    this.colorChange();
 }
 
-
-  colorChange() {
-    const history = this.state.history.slice();
-    const current = history[history.length - 1];
-    const hisIndex = history.indexOf(current);
-    const color = this.state.color;
-      history[hisIndex].dots[this.indexOfDot].prevColor = history[hisIndex].dots[this.indexOfDot].prevColor.concat([{
-          prevColor: color
-        }]);
-      history[hisIndex].dots[this.indexOfDot].color = color;
-    this.setState({
-      history: history
-    });
-  }
 
   getSelectedDot(){
     const history = this.state.history.slice();
@@ -287,6 +271,7 @@ class App extends React.Component{
       this.setState({
       history: history,
       colorUndo: false,
+      colorRedo: false,
       undoIndex: 2,
       selectMode: false,
       selectDot: true,
@@ -407,11 +392,9 @@ class App extends React.Component{
     const dotValue = history[lastObjAdded].dots.slice();
     const valueOfDot = dotValue.valueOf();
     const indexPrev = this.indexOfDot - 1;
-    console.log(valueOfDot);
     const newDot = history[lastObjAdded].dots;
     const length = newDot[newDot.length - 1];
     const index = newDot.indexOf(length);
-    console.log(index);
     this.redoIndexAnimation = index;
 
     const color = history[lastObjAdded].dots[this.indexOfDot].color;
@@ -460,9 +443,7 @@ class App extends React.Component{
     const lastChanged = selectedDot[selectedDot.length - colorUndoIndex];
     const currentIndex = selectedDot.indexOf(lastChanged);
     const dotPrevColor = selectedDot[currentIndex].prevColor;
-    if(selectedDot[indexOfLastColorAdded].prevColor !== history[indexOfCurrHistory].dots[this.index].color){
-      this.colorChange();
-    }
+    console.log(this.state.undoColorCount);
       history[indexOfCurrHistory].dots[this.index].color = dotPrevColor;
     this.setState({
       history: history,
@@ -475,7 +456,8 @@ class App extends React.Component{
     if(this.state.undoColorCount === selectedDot.length - 1){
       this.setState({
           colorUndo: false,
-          colorUndoIndex: 1
+          colorUndoIndex: 1,
+          undoColorCount: 0
       });
     }
   }
@@ -679,7 +661,6 @@ class App extends React.Component{
         const board = document.getElementById('board');
               board.style.backgroundColor = this.state.backgroundColor;
       }
-      console.log(this.ranColor);
     }
 
 
