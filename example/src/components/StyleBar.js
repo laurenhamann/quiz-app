@@ -9,21 +9,14 @@ function StyleBar(props){
 			onClick={props.triggerColorChange}
 			value={palette.color} />
 	)
-	const colorPalette = props.compColorPalette;
-	const colorPaletteDiv = colorPalette.map((palette, index) =>
-		<button key={index} 
-			style={{backgroundColor: palette, width: "10px", height:"10px", borderRadius: "50px"}}
-			onClick={props.triggerColorChange}
-			value={palette} />
-	)
 	return(
 		<header className={"ParentTb"} style={{width: 100 + '%'}}>
-			<aside className={props.display ? "SBColorOpened" : ""}>
+			<aside className={props.display ? "SBColorOpened" : ""} style={props.display ? {border: props.color + " 2px solid"} : {border: "none"}}>
 			{props.width > 800 
 					? 
-			<h2 onClick={props.handleOnClick} style={props.display ? {color: "#000"} : {}} className={props.default ? "style" : "SBBlackoutTitle"}> Style Bar </h2>
+			<h2 onClick={props.handleOnClick} style={{color: props.color}} className={props.default ? "style" : "SBBlackoutTitle"}> Style Bar </h2>
 					:
-			<h2 onClick={props.handleOnClick} style={props.display ? {color: "#000"} : {}} className={props.default ? "style" : "SBBlackoutTitle"}> + </h2> }
+			<h2 onClick={props.handleOnClick} style={{color: props.color}} className={props.default ? "style" : "SBBlackoutTitle"}> + </h2> }
 				<form style={props.display ? {display: "block", width: "35%"} : {display: "none", width: "10%"}} onSubmit={props.handleSubmit} className="style-bar">
 					<label>
 					Color:
@@ -33,9 +26,6 @@ function StyleBar(props){
 						<button className="save" onClick={props.triggerSaveColor} value={props.color}> Save </button>
 						<br />{paletteDiv}
 						<br />
-						<button className="createPalette" onClick={props.triggerCompColor} disabled={!props.createPalette} value={props.compColorPalette}> Create Palette </button>
-						<br />{colorPaletteDiv}
-
 
 					</label>
 					<label className="sizeStyle">
@@ -62,7 +52,7 @@ function StyleBar(props){
 					</label>
 					<label>
 					Background:
-						<button onClick={props.randomBackgroundColor} style={{backgroundColor: props.backgroundColor, color: props.color}} value={props.backgroundColor}> Random Color </button>
+						<button onClick={props.randomBackgroundColor} style={{backgroundColor: props.backgroundColor, color: props.colorValue}} value={props.backgroundColor}> Random Color </button>
 					{props.default ? (
 						<button className="blackout" onClick={props.blackOut} style={{color: "#fff", backgroundColor: "#000"}}> 
 							Blackout 
@@ -79,13 +69,13 @@ function StyleBar(props){
 
 			</aside>
 
-			<h1 className="title" style={props.default ? {color: "#000000"} : {color: "#ffffff"}}> Dot Game </h1>
+			<h1 className= "title" style={{color: props.color}}> Dot Game </h1>
 				<div className={props.width > 800 ? "TbButtonsLarge" : "TbButtonsSmall"}>
-					<button onClick={props.triggerUndo} disabled={props.disabledUndo}className={props.disabledUndo ? "undo button" : "btnAbled undo button"} style={props.default ? {color: "#000000", background: "none"} : {color: "#ffffff", background: "#000000"}}>Undo</button>
-					<button onClick={props.triggerRedo} disabled={props.disabledRedo} className={props.disabledRedo ? "redo button" : "btnAbled redo button"} style={props.default ? {color: "#000000", background: "none"} : {color: "#ffffff", background: "#000000"}}> Redo </button>
-					<button onClick={props.resetAll} className="reset button btnAbled" style={props.default ? {color: "#000000", background: "none"} : {color: "#ffffff", background: "#000000"}}> Reset </button>
-					<button onClick={props.triggerColorUndo} disabled={!props.colorUndo} className={!props.colorUndo ? "undo button" : "btnAbled undo button"} style={props.default ? {color: "#000000", background: "none"} : {color: "#ffffff", background: "#000000"}}>Undo Color</button>
-					<button onClick={props.triggerColorRedo} disabled={!props.colorRedo} className={!props.colorRedo ? "undo button" : "btnAbled undo button"} style={props.default ? {color: "#000000", background: "none"} : {color: "#ffffff", background: "#000000"}}>Redo Color</button>					
+					<button onClick={props.triggerUndo} disabled={props.disabledUndo}className={props.disabledUndo ? "undo button" : "btnAbled undo button"} style={{color: props.color, background: "none"}}>Undo</button>
+					<button onClick={props.triggerRedo} disabled={props.disabledRedo} className={props.disabledRedo ? "redo button" : "btnAbled redo button"} style={{color: props.color, background: "none"}}> Redo </button>
+					<button onClick={props.resetAsk} className="reset button btnAbled" style={{color: props.color, background: "none"}}> Reset </button>
+					<button onClick={props.triggerColorUndo} disabled={!props.colorUndo} className={!props.colorUndo ? "undo button" : "btnAbled undo button"} style={{color: props.color, background: "none"}}>Undo Color</button>
+					<button onClick={props.triggerColorRedo} disabled={!props.colorRedo} className={!props.colorRedo ? "undo button" : "btnAbled undo button"} style={{color: props.color, background: "none"}}>Redo Color</button>					
 				</div>
 				
 		</header>
