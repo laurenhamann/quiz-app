@@ -1,6 +1,8 @@
 import React from 'react';
 import DotList from './components/DotList';
 import StyleBar from './components/StyleBar';
+import BreakPointDisplay from './components/BreakPointDisplay';
+import HasError from './components/HasError';
 class App extends React.Component{
   constructor(props){
     super(props);
@@ -29,7 +31,7 @@ class App extends React.Component{
       colorRedo: false,
       colorUndoIndex: 1,
       colorRedoIndex: 1,
-      selectDot: true,
+      selectDot: false,
       //Style Bar State
       display: false,
       color: "#000000",
@@ -75,6 +77,7 @@ class App extends React.Component{
     window.addEventListener('keydown', this.enter);
     this.updateWindowDimensions();
     window.addEventListener('resize', this.updateWindowDimensions);
+    this.random();
   }
 
   componentWillUnmount() {
@@ -216,7 +219,7 @@ class App extends React.Component{
     const history = this.state.history.slice();
     const current = history[history.length - 1];
     const selected = event.target.getAttribute('id');
-    const selectedDot = selected - 1;
+    const selectedDot = selected - 1 < 0 ? 0 : selected - 1;
     const hisIndex = history.indexOf(current);
     const dotSlice = current.dots.slice();
     const currentDot = dotSlice[dotSlice.length - 1];
@@ -666,11 +669,13 @@ class App extends React.Component{
 
   render(){
     this.getSelectedDot();
-    this.colorChange = setInterval(this.random, 2000);
+    this.colorChange = setInterval(this.random, 3000);
 
   //Setting Left position for start button
     const halfWidth = window.innerWidth / 2;
     const leftButton = halfWidth - 104.6485;
+    const centerSmallScreen = halfWidth - 150;
+    const centerAHref = halfWidth - 120;
 
     const backgroundStart = {
       backgroundColor: this.ranColor
@@ -679,9 +684,8 @@ class App extends React.Component{
   //Getting current previous index of dots
     this.getCurrAndPrevDotIndex();
 
-    return(<div style={this.state.game ? {width: this.state.width, height: this.state.height, backgroundColor: this.state.backgroundColor} : {width: this.state.width, height: this.state.height}} id="board"  className={this.state.resetAsk ? "greyBackground" : "none"}>
-      
-
+    return(
+      <div style={this.state.game ? {width: this.state.width, height: this.state.height, backgroundColor: this.state.backgroundColor} : {width: this.state.width, height: this.state.height}} id="board"  className={this.state.resetAsk ? "greyBackground" : "none"}>
       {this.state.game ? (
         <React.Fragment>
           <StyleBar 
@@ -741,12 +745,19 @@ class App extends React.Component{
             width={this.state.width}
             height={this.state.height}           
             /> 
-            
         </React.Fragment>
-      ) : (
-        <button className="startButton" onClick={this.handleClick} style={{position: "absolute", left: leftButton + 'px', top: window.innerHeight * 0.4, background: "none"}}>
-          Start game
-        </button>
+      ) : window.innerWidth < 1000 ? 
+      ( <BreakPointDisplay 
+        leftButton={centerSmallScreen}
+        centerAHref={centerAHref}/>
+         ) : (
+        <React.Fragment>
+          <p style={{position: "absolute", top: "6px", left: centerAHref + 'px'}}><a href="https://github.com/LaurenwallerDesigns/dot-game.git"> Check Out My Code </a></p>
+
+          <button className="startButton" onClick={this.handleClick} style={{position: "absolute", left: leftButton + 'px', top: window.innerHeight * 0.4, background: "none"}}>
+            Start game
+          </button>
+        </React.Fragment>
       )}
         
     </div>
