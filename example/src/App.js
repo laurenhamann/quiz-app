@@ -3,37 +3,55 @@ import DotList from './components/DotList';
 import StyleBar from './components/StyleBar';
 import BreakPointDisplay from './components/BreakPointDisplay';
 import HasError from './components/HasError';
+
 class App extends React.Component{
   constructor(props){
     super(props);
     this.state = {
+    //Screen Size
       width: 0,
       height: 0,
+    //After start button is pressed, changed to true to start game
       game: false,
+    //Holds all the dots
       history:[{
         dots:[],
       }],
+    //selected dot is the previous dot that is currently blinking
       selectedDots: 0,
+    //Whether the style is default or blackout
       default: true,
       backgroundColor: "#ffffff",
+    //Question for Reset is displayed?
       resetAsk: false,
-      //Top Bar State
+    //Whether hasError component is displayed
+      hasError: false,
+  //TOP BAR STATE
+    //The index of which history array to display
       redoIndex: 2,
       undoIndex: 2,
+    //Keeps count of undo/redo button presses
       redoCount: 0,
       undoCount: 0,
+    //SelectMode changes how undo button works
       selectMode: false,
+    //Keeps count of undo/redo button presses
       undoColorCount: 0,
       redoColorCount: 0,
+    //Props to stylebar on if buttons are disabled
       disabledRedo: true,
       disabledUndo: true,
       colorUndo: false,
       colorRedo: false,
+    //The index of which prevColor to display
       colorUndoIndex: 1,
       colorRedoIndex: 1,
+    //props to dot if true, onclick function works
       selectDot: false,
-      //Style Bar State
+  //STYLE BAR STATE
+    //open on Click style side bar
       display: false,
+    //style bar values; props for styling of dot
       color: "#000000",
       size: 24,
       space: 1,
@@ -80,10 +98,17 @@ class App extends React.Component{
     this.random();
   }
 
+//Error catcher
+  static getDerivedStateFromError(error) {
+    return {
+      hasError: true
+    };
+  }
   componentWillUnmount() {
     window.removeEventListener('resize', this.updateWindowDimensions);
   }
 
+//Changes state of width/height on screen resizes
   updateWindowDimensions() {
     this.setState({ width: window.innerWidth, height: window.innerHeight});
   }
@@ -125,6 +150,7 @@ class App extends React.Component{
     this.top = parseFloat(this.dotNow.style.top);
   }
 
+//GETTING THE PREVIOUS DOT AND CURRENT DOT
   getCurrAndPrevDotIndex() {
     this.history = this.state.history.slice();
     this.current = this.history[this.history.length - 1];
@@ -237,7 +263,7 @@ class App extends React.Component{
     });
 }
 
-
+//IF I REVAMP THIS; SEE IF THIS FUNCTION IS NECESSARY
   getSelectedDot(){
     const history = this.state.history.slice();
     const current = history[history.length - 1];
@@ -514,18 +540,19 @@ class App extends React.Component{
     }
   }
 
+//QUESTION SHOWN ONclick on reset button
   resetAsk() {
     this.setState({
       resetAsk: true
     });
   }
-
+//Exit question when x is pressed
   exitReset() {
     this.setState({
       resetAsk: false
     });
   }
-
+//If okay is pressed, reset game
   resetAll(){
     this.setState({game: false});
     window.location.reload();
@@ -654,6 +681,7 @@ class App extends React.Component{
     }
   }
 
+//RANDOM COLOR BACKGROUND
   random(){
       const randomColor = Math.floor(Math.random()*16777215).toString(16);
       this.ranColor = "#" + randomColor;
@@ -677,16 +705,15 @@ class App extends React.Component{
     const centerSmallScreen = halfWidth - 150;
     const centerAHref = halfWidth - 120;
 
-    const backgroundStart = {
-      backgroundColor: this.ranColor
-    }
-
   //Getting current previous index of dots
     this.getCurrAndPrevDotIndex();
 
     return(
       <div style={this.state.game ? {width: this.state.width, height: this.state.height, backgroundColor: this.state.backgroundColor} : {width: this.state.width, height: this.state.height}} id="board"  className={this.state.resetAsk ? "greyBackground" : "none"}>
-      {this.state.game ? (
+      {this.state.hasError ? 
+        ( <HasError
+            leftButton={leftButton} /> ) :
+        this.state.game ? (
         <React.Fragment>
           <StyleBar 
             handleOnClick={this.handleOpenOnClick}
@@ -767,4 +794,18 @@ class App extends React.Component{
 
 
 export default App;
+//GUIDE TO WHAT IS GOING ON IN DISPLAY OF APP
+// if(hasError === true) {
+//   display: HasError
+// }else {
+//   if (game === true) {
+//     display: game
+//   }else{
+//     if(window.innerWidth > 1000) {
+//       display:BreakPointDisplay
+//     }else{
+//     display: start button
+//     }
+//   }
+// }
 

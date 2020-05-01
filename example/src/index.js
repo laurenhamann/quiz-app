@@ -10,3 +10,12 @@ ReactDOM.render(<App />, document.getElementById('root'));
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
+
+
+//If I ever go back; things I would like to do:
+// 1. add mobile/touchscreen version
+// 2. make input for spacing and sizes
+// 3. check centering dots when font size changes. 
+// 4. see why spacing on up/down is closer than before
+// 5. maybe a drag and drop feature.
+// 6. add hover over palette delete button. 
