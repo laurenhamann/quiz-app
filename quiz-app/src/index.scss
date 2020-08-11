@@ -1,0 +1,38 @@
+header {
+	margin-left: auto;
+	margin-right: auto;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-content: center;
+	text-align: center;
+	h1 {
+		margin-left: auto;
+		margin-right: auto;
+		width: 50vw;
+		order: 1;
+	}
+	nav {
+		margin: 1px auto;
+		width: 50vw;
+		order: 2;
+		ul {
+			li {
+				text-align: left;
+				list-style: none;
+			}
+		}
+	}
+	p {
+		position: fixed;
+		right: 10px;
+		top: 0px;
+		margin: 1px auto;
+		width: auto;
+		order: 3;
+	}
+}
+
+div {
+	height: 300vh;
+}
