@@ -70,10 +70,20 @@ class App extends React.Component {
     const quiz = this.state.quizOne.map((quiz, i) => 
        <Questions 
         question={quiz.question}
-        answers={quiz.choices}/>
+        answers={quiz.choices}
+        choiceClick={this.choiceClick}/>
     
     );
     return quiz;
+  }
+
+  choiceClick(event, correct) {
+    const target = event.target;
+    if(correct === true) {
+      target.classList.add("correct-answer");
+    }else {
+      target.classList.add("incorrect-answer");
+    }
   }
 
   render() {

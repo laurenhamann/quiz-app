@@ -3,7 +3,7 @@ import React from 'react';
 function Choices(props) {
 	console.log(props.choices);
 	return (
-		<p className="choice"> {props.choices} </p>
+		<button onClick={(event) => {props.onclick(event, props.correct)}} className="choice"> {props.choices} </button>
 	);
 }
 export default Choices;
