@@ -1,22 +1,18 @@
 import React from 'react';
-import Choices from './Answers';
+import Boolean from './Boolean';
+import ScaleToFive from './ScaleToFive';
+import ScaleDisagreeToAgree from './ScaleDisagreeToAgree';
 
 class Questions extends React.Component {
 	render() {
-		const choice = this.props.answers.map((a, index) => 
-			<Choices
-				choices={a.choice}
-				correct={a.correct}
-				onclick={this.props.choiceClick} 
-			/>
-		);
+		const type = this.props.type === "boolean" ? <Boolean score={this.props.score} index={this.props.index} /> : this.props.type === "scaleToFive" ? <ScaleToFive score={this.props.score} index={this.props.index} /> : <ScaleDisagreeToAgree score={this.props.score} index={this.props.index}/>;
 		return(
 			<div className="question-div">
 				<section className="question">
 					<h2>{this.props.question}</h2>
 				</section>
 				<section className="answers">
-					{choice}
+					{type}
 				</section>
 			</div>
 

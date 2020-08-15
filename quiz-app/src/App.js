@@ -3,95 +3,127 @@ import './App.css';
 import './index.scss';
 import Header from './Header';
 import Questions from './Question';
+import Calculate from './Calculate';
 
+const questions = [{question: "Question One",
+                    type: "boolean",
+                    score: 0},
+                    {question: "Question Two",
+                    type: "boolean",
+                    score: 0},
+                    {question: "Question Three",
+                    type: "boolean",
+                    score: 0},
+                    {question: "Question Four",
+                    type: "boolean",
+                    score: 0},
+                    {question: "Question Five",
+                    type: "boolean",
+                    score: 0},
+                    {question: "Question Six",
+                    type: "boolean",
+                    score: 0},
+                    {question: "Question Seven",
+                    type: "boolean",
+                    score: 0},
+                    {question: "Question Eight",
+                    type: "boolean",
+                    score: 0},
+                    {question: "Question Nine",
+                    type: "boolean"},
+                    {question: "Question Ten",
+                    type: "boolean",
+                    score: 0},
+                    {question: "Question Eleven",
+                    type: "scaleToFive",
+                    score: 0},
+                    {question: "Question Twelve",
+                    type: "scaleToFive",
+                    score: 0},
+                    {question: "Question 13",
+                    type: "scaleToFive",
+                    score: 0},
+                    {question: "Question 14",
+                    type: "scaleToFive",
+                    score: 0},
+                    {question: "Question 15",
+                    type: "scaleToFive",
+                    score: 0},
+                    {question: "Question 16",
+                    type: "scaleDisagreeToAgree",
+                    score: 0},
+                    {question: "Question 17",
+                    type: "scaleDisagreeToAgree",
+                    score: 0},
+                    {question: "Question 18",
+                    type: "scaleDisagreeToAgree",
+                    score: 0},
+                    {question: "Question 19",
+                    type: "scaleDisagreeToAgree",
+                    score: 0},
+                    {question: "Question 20",
+                    type: "scaleDisagreeToAgree",
+                    score: 0}];
 class App extends React.Component {
   constructor(props){
   super(props);
   this.state = {
-    quizOne:[ 
-          {
-            question: "6 + 4",
-            choices: [{
-                    choice: 10,
-                    correct: true},
-                    {choice: 8,
-                    correct: false},
-                    {choice: 11,
-                    correct: false},
-                   {choice: 32,
-                   correct: false}
-                ]
-          },
-          {
-            question: "8 * 10",
-            choices: [{
-                    choice: 18,
-                    correct: false},
-                    {choice: 80,
-                    correct: true},
-                    {choice: 34,
-                    correct: false},
-                   {choice: 100,
-                   correct: false}
-                ]
-          },
-          {
-            question: "100 / 2",
-            choices: [{
-                    choice: 187,
-                    correct: false},
-                    {choice: 50,
-                    correct: true},
-                    {choice: 180,
-                    correct: false},
-                   {choice: 130,
-                   correct: false}
-                ]
-          },
-          {
-            question: "120 - 2",
-            choices: [{
-                    choice: 18,
-                    correct: false},
-                    {choice: 118,
-                    correct: true},
-                    {choice: 140,
-                    correct: false},
-                   {choice: 20,
-                   correct: false}
-                ]
-          }
-        ]
+    questions: questions,
+
   };
   this.renderQuestions = this.renderQuestions.bind(this);
+  this.choiceClick = this.choiceClick.bind(this);
   }
 
   renderQuestions = () => {
-    const quiz = this.state.quizOne.map((quiz, i) => 
+    const questions = this.state.questions.map((q, i) => 
        <Questions 
-        question={quiz.question}
-        answers={quiz.choices}
-        choiceClick={this.choiceClick}/>
+        question={q.question}
+        type={q.type}
+        score={this.choiceClick}
+        index={i}
+        />
     
     );
-    return quiz;
+    return questions;
   }
 
-  choiceClick(event, correct) {
+  choiceClick(event, score, index) {
     const target = event.target;
-    if(correct === true) {
-      target.classList.add("correct-answer");
-    }else {
-      target.classList.add("incorrect-answer");
-    }
-  }
+    const parent = target.parentNode;
+    const siblings = parent.childNodes;
+      siblings.forEach( s => {
+        if(s.classList.contains('selected')){
+          s.classList.remove('selected');
+        }
+      })
+      target.classList.add('selected');
+    const arrayQuestion = this.state.questions.slice();
+          arrayQuestion[index].score = score;
+
+      this.setState({
+        questions: arrayQuestion
+      });
+
+      const selected = document.querySelectorAll('.selected');
+      let count = 0;
+      selected.forEach( sd => {
+        count++;
+      })
+      console.log(count);
+      if(count === this.state.questions.length){
+        this.calculateButton = <Calculate />;
+        console.log('in');
+      }
+   }
 
   render() {
-    console.log(this.renderQuestions);
+    //console.log(this.renderQuestions);
     return (
       <React.Fragment>
         <Header />
         {this.renderQuestions()}
+        {this.calculateButton}
       </React.Fragment>
     );
   }
