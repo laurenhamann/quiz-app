@@ -5,6 +5,7 @@ import Header from './Header';
 import Questions from './Question';
 import Button from './Button';
 import Results from './Results';
+import Arrows from './Arrows';
 
 const questions = [{question: "Question One",
                     type: "boolean",
@@ -66,11 +67,11 @@ const questions = [{question: "Question One",
                     type: "scaleDisagreeToAgree",
                     score: 0}];
 
-  const lowSubtitle = "Your results show a low likelihood of BLANK";
+  const lowSubtitle = "Your results show a low liklihood of BLANK";
   const lowDescription = "Intrinsicly leverage existing bricks-and-clicks core competencies after frictionless solutions. Monotonectally deliver state of the art systems rather than top-line intellectual capital. Objectively recaptiualize backward-compatible channels without long-term high-impact benefits. Uniquely matrix flexible infrastructures whereas enterprise synergy. Conveniently engage market-driven human capital without virtual infrastructures.";
-  const midSubtitle = "Your results show a mid-range likeihood of BLANK";
+  const midSubtitle = "Your results show a mid-range likihood of BLANK";
   const midDescription = "Intrinsicly leverage existing bricks-and-clicks core competencies after frictionless solutions. Monotonectally deliver state of the art systems rather than top-line intellectual capital. Objectively recaptiualize backward-compatible channels without long-term high-impact benefits. Uniquely matrix flexible infrastructures whereas enterprise synergy. Conveniently engage market-driven human capital without virtual infrastructures.";
-  const highSubtitle = "Your results show a high likeihood of BLANK";
+  const highSubtitle = "Your results show a high likihood of BLANK";
   const highDescription = "Intrinsicly leverage existing bricks-and-clicks core competencies after frictionless solutions. Monotonectally deliver state of the art systems rather than top-line intellectual capital. Objectively recaptiualize backward-compatible channels without long-term high-impact benefits. Uniquely matrix flexible infrastructures whereas enterprise synergy. Conveniently engage market-driven human capital without virtual infrastructures.";
   const errSubtitle = "There was an error while processing your results";
   const errDescription = "Please click the restart button and try again";
@@ -79,13 +80,15 @@ class App extends React.Component {
   super(props);
   this.state = {
     questions: questions,
-    results: false
+    results: false,
+    arrows: "none"
 
   };
   this.renderQuestions = this.renderQuestions.bind(this);
   this.choiceClick = this.choiceClick.bind(this);
   this.calculate = this.calculate.bind(this);
   this.results = this.results.bind(this);
+  this.startClick = this.startClick.bind(this);
   }
   componentDidMount() {
     this.scroll();
@@ -152,9 +155,11 @@ class App extends React.Component {
       selected.forEach( sd => {
         count++;
       })
+
+      console.log(count);
       const position = count < this.state.questions.length ? questions[count].top : questions[questions.length - 1].top;
 
-      if(count === this.state.questions.length){
+      if(count >= this.state.questions.length - 1){
         this.calculateButton = <Button
                                 onClick={this.calculate}
                                 title = "Get Results" />;
@@ -174,6 +179,24 @@ class App extends React.Component {
         });
         console.log(count);
         }
+   }
+
+   arrowClick(event) {
+    const target = event.target.id;
+    console.log(target);
+    console.log('ran');
+   }
+
+   startClick() {
+      const top = this.state.questions[0].top;
+      this.setState({
+        arrows: "block"
+      });
+      window.scrollTo({
+          top: top,
+          left: 0,
+          behavior: 'smooth'
+        });
    }
 
   calculate(event) {
@@ -200,6 +223,8 @@ class App extends React.Component {
       behavior: 'smooth'
     });
     const body = document.querySelector('body');
+    const header = document.querySelector('header');
+    header.classList.add('header-results');
     body.classList.add('scrollBody');
     let result;
     if(score < 5){
@@ -242,6 +267,7 @@ class App extends React.Component {
     this.scroll();
     let display;
     let button;
+    let arrows;
     if(this.state.results) {
       display = this.results(this.score);
       button = <Button 
@@ -250,11 +276,16 @@ class App extends React.Component {
                 />
     }else {
       display = this.renderQuestions();
+      arrows = <Arrows
+                  display = {this.state.arrows}
+                  onClick={this.arrowClick} />
       button = this.calculateButton;
     }
     return (
       <React.Fragment>
-        <Header />
+        <Header 
+        onClick={this.startClick}/>
+        {arrows}
         {display}
         {button}
         
