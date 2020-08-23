@@ -6,7 +6,7 @@ import Questions from './Question';
 import Button from './Button';
 import Results from './Results';
 import Arrows from './Arrows';
-
+let clicks = 0;
 const questions = [{question: "Question One",
                     type: "boolean",
                     score: 0},
@@ -75,24 +75,25 @@ const questions = [{question: "Question One",
   const highDescription = "Intrinsicly leverage existing bricks-and-clicks core competencies after frictionless solutions. Monotonectally deliver state of the art systems rather than top-line intellectual capital. Objectively recaptiualize backward-compatible channels without long-term high-impact benefits. Uniquely matrix flexible infrastructures whereas enterprise synergy. Conveniently engage market-driven human capital without virtual infrastructures.";
   const errSubtitle = "There was an error while processing your results";
   const errDescription = "Please click the restart button and try again";
+  const root = document.getElementById('root');
+  let arrowdisplay = false;
 class App extends React.Component {
   constructor(props){
   super(props);
   this.state = {
     questions: questions,
-    results: false,
-    arrows: "none"
-
+    results: false
   };
   this.renderQuestions = this.renderQuestions.bind(this);
   this.choiceClick = this.choiceClick.bind(this);
   this.calculate = this.calculate.bind(this);
   this.results = this.results.bind(this);
   this.startClick = this.startClick.bind(this);
+  this.arrowClick = this.arrowClick.bind(this);
   }
   componentDidMount() {
     this.scroll();
-    window.scrollTo({
+    root.scrollTo({
         top: 0,
         left: 0,
         behavior: 'smooth'
@@ -102,21 +103,16 @@ class App extends React.Component {
   //scroll after answer is selected
   scroll() {
     const questionPosition = document.querySelectorAll('.question-div');
-    let offsetTopQuestions = [];
+    let offsetleftQuestions = [];
 
     questionPosition.forEach( q => {
-      const topPosition = q.offsetTop;
-      offsetTopQuestions.push(topPosition);
-      // const answerDiv = q.querySelector('.answers .selected') === null ? window.scrollTo({
-      //     top: offsetTopQuestions[offsetTopQuestions.indexOf(q) + 1],
-      //     left: 0,
-      //     behavior: 'smooth'
-      //   }) : null ;                 
+      const leftPosition = q.offsetLeft;
+      offsetleftQuestions.push(leftPosition);                 
     })
 
     questions.forEach((q, index) => {
-      const position = offsetTopQuestions[index];
-      Object.assign(q, {top: position});
+      const position = offsetleftQuestions[index];
+      Object.assign(q, {left: position});
     })
   }
 
@@ -152,52 +148,59 @@ class App extends React.Component {
 
       const selected = document.querySelectorAll('.selected');
       let count = 0;
+      clicks = selected.length;
       selected.forEach( sd => {
         count++;
       })
 
-      console.log(count);
-      const position = count < this.state.questions.length ? questions[count].top : questions[questions.length - 1].top;
+      if(count >= 1){
+        const left = document.getElementById('left');
+        left.classList.remove('hide');
+      }
 
-      if(count >= this.state.questions.length - 1){
+      const position = count < this.state.questions.length ? questions[count].left : questions[questions.length - 1].left;
+
+      if(count === this.state.questions.length){
         this.calculateButton = <Button
                                 onClick={this.calculate}
                                 title = "Get Results" />;
-        console.log('in');
-        const newPosition = position + 5000;
-        console.log(newPosition);
-        window.scrollTo({
-          top: newPosition,
-          left: 0,
-          behavior: 'smooth'
-        });
       } else {
-        window.scrollTo({
-          top: position,
-          left: 0,
+        root.scrollTo({
+          top: 0,
+          left: position,
           behavior: 'smooth'
         });
-        console.log(count);
         }
    }
 
    arrowClick(event) {
     const target = event.target.id;
-    console.log(target);
-    console.log('ran');
-   }
-
-   startClick() {
-      const top = this.state.questions[0].top;
-      this.setState({
-        arrows: "block"
+    const selected = document.querySelectorAll('.selected');
+      clicks--;
+      console.log(clicks);
+      const left = this.state.questions[clicks].left;
+      root.scrollTo({
+        top: 0,
+        left: left,
+        behavior: 'smooth'
       });
-      window.scrollTo({
-          top: top,
-          left: 0,
-          behavior: 'smooth'
-        });
-   }
+  }
+
+  startClick(event) {
+    const left = this.state.questions[0].left;
+    this.setState({
+      arrows: "block"
+    });
+    root.scrollTo({
+      top: 0,
+      left: left,
+      behavior: 'smooth'
+    });
+
+    const button = event.target;
+    button.classList.add('clicked');
+    console.log(left);
+  }
 
   calculate(event) {
     const button = event.target;
@@ -211,21 +214,23 @@ class App extends React.Component {
       score = score + num;
     })
 
-    this.resultsDisplay = setTimeout(function() {this.setState({results: true});}.bind(this), 2000);
+    this.resultsDisplay = setTimeout(function() {this.setState({results: true});}.bind(this), 5000);
     this.score = score;
   }
 
 
   results(score) {
-    window.scrollTo({
+    root.scrollTo({
       top: 0,
       left: 0,
       behavior: 'smooth'
     });
-    const body = document.querySelector('body');
+    const body = document.querySelector('#root');
     const header = document.querySelector('header');
     header.classList.add('header-results');
     body.classList.add('scrollBody');
+    const button = document.querySelectorAll('button');
+      button[button.length - 1].classList.remove('animateCircle');
     let result;
     if(score < 5){
       console.log('in lower');
@@ -256,14 +261,19 @@ class App extends React.Component {
   }
 
   reload() {
-    window.scrollTo({
+    root.scrollTo({
         top: 0,
         left: 0,
         behavior: 'smooth'
       });
-    window.location.reload();
+    document.location.reload();
   }
   render() {
+    if(clicks > 0) {
+      arrowdisplay = true;
+    }else{
+      arrowdisplay = false;
+    }
     this.scroll();
     let display;
     let button;
@@ -277,8 +287,8 @@ class App extends React.Component {
     }else {
       display = this.renderQuestions();
       arrows = <Arrows
-                  display = {this.state.arrows}
-                  onClick={this.arrowClick} />
+                  onClick={this.arrowClick}
+                  disabled={arrowdisplay} />
       button = this.calculateButton;
     }
     return (
