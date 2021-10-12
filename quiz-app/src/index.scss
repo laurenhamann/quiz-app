@@ -1,8 +1,9 @@
-$dkBlue: #0B132B;
-$spaceCadet: #1C2541;
-$midBlue: #3A506b;
-$lightBlue: #5bc0be;
-$brightBlue: #6fffe9;
+$lightGreen: #A763D1;
+$mauve: #592B3F;
+$dkGreen: #0E8AA4;
+$white: #F2F8F5;
+$lightPink: #F83DB1;
+$linearGradient: linear-gradient(to bottom right, #4C6CCD, #F83DB1);
 $breakpointOne: 600px;
 $breakpointTwo: 900px;
 $breakpointThree: 1200px;
@@ -10,20 +11,21 @@ $breakpointThree: 1200px;
 
 body{
 	text-align: center;
-	background-color: $midBlue;
+	background-image: $linearGradient;
+	height: 100vh;
 }
 
 #root {
 	display: flex;
 	flex-direction: row;
-	justify-content: space-between;
+	justify-content: flex-start;
 	overflow:hidden;
 
 }
 
 .scrollBody{
 	flex-direction: column !important;
-	justify-content: space-between !important;
+	justify-content: flex-start !important;
 	overflow: scroll !important;
 }
 
@@ -31,7 +33,6 @@ body{
 
 header {
 	flex:0 0 auto;
-	background-color: $lightBlue;
 	margin-left: auto;
 	margin-right: auto;
 	display: flex;
@@ -45,14 +46,14 @@ header {
 		margin-left: auto;
 		margin-right: auto;
 		width: 50vw;
-		color: $midBlue;
+		color: $white;
 		text-shadow: 2px 2px 2px #00000030; 
 		font-size: 3em;
 	}
 
 	.button {
-		background-color: $midBlue;
-		color: $lightBlue;
+		background-color: $white;
+		color: $lightGreen;
 	}
 }
 
@@ -75,7 +76,7 @@ aside{
 	#right {
 		font-size: 45px;
 		background-color: transparent;
-		color: $lightBlue;
+		color: $white;
 		width: auto;
 		height: auto;
 		margin: auto 10px;
@@ -93,10 +94,8 @@ aside{
 div {
 	height: 100vh;
 	width: 100vw;
-	background-color:$midBlue; 
 	flex:0 0 auto;
 }
-
 .question-div	{
 	display: flex;
 	flex-direction: column;
@@ -106,7 +105,7 @@ div {
 }
 
 .question h2 {
-	color: $lightBlue;
+	color: $white;
 	font-size: 2em;
 	text-shadow: 2px 2px 2px #00000060;
 
@@ -121,83 +120,76 @@ div {
 		z-index: 4;
 		margin: 10px;
 		border-radius: 10px;
-		background-color: $lightBlue;
+		background-color: $white;
 		outline:none;
 		border: none;
-		color: $midBlue;
+		color: $dkGreen;
 		width: 50vw;
 		box-shadow: 2px 2px 2px #00000060;
 		transition: border 0.4s, box-shadow 0.4s;
 		font-size: 1.5em;
 		&:hover{
 			box-shadow: 2px 4px 4px #00000080;
-			color: $brightBlue;
+			color: $lightPink;
 			cursor: pointer;
 		}
 	}
 	.selected {
 		box-shadow: 2px 4px 4px #00000080;
-		border: 3px solid $brightBlue;
+		border: 3px solid $lightPink;
 	}
 }
 
+//results component
 .results {
 	margin: 0 auto;
 	text-align: center;
-	width: 80vw;
 	h1{
-		color: $brightBlue;
+		color: $lightPink;
 		text-shadow: 2px 2px 2px #00000030; 
 	}
-	p {
+	h3{
 		color: #eee;
 		text-align: left;
 		text-shadow: 2px 2px 2px #00000030;
 	}
+	ul li {
+		color: #ffffff;
+		text-align: left;
+		margin-bottom: 15px;
+		list-style: none;
+	}
 }
-
-.button {
+.button-container {
 	position: absolute;
-	bottom: -5px;
-	margin: 10px auto;
+	bottom: 15px;
+	height: 8vh;
+	width: 100vw;
+}
+.button, .start-button {
+	position: absolute;
+	bottom: 15px;
+	margin-left: auto;
+	margin-right: auto;
+	left: 0;
+	right: 0;
+	text-align: center;
 	border-radius: 10px;
-	background-color: $lightBlue;
+	background-color: $white;
 	outline:none;
 	border: none;
-	color: $midBlue;
-	width: 100vw;
+	color: $dkGreen;
+	width:  20vw;
 	height: 5vh;
 	box-shadow: 2px 2px 2px #00000060;
 	transition: box-shadow 0.4s;
 	font-size: 1.5em;
 	&:hover{
 		box-shadow: 2px 4px 4px #00000080;
-		color: $brightBlue;
+		color: $lightPink;
 		cursor: pointer;
 	}
 }
-
-@keyframes spinner {
-	100%{
-		transform: rotate(360deg);
-	}
-}
-
-.animateCircle {
-	font-size: 0px !important;
-	width: 5vw;
-	height: 5vw !important;
-	left: 47.5%;
-	border-radius: 100%;
-	border-left: 10px solid $lightBlue;
-	border-right: 10px solid $lightBlue;
-	background-color: transparent;
-	box-shadow: 0px 0px 0px #00000000!important;
-	animation: spinner 0.50s linear infinite;
-}
-
-
-
 .clicked{
 	display: none;
 }

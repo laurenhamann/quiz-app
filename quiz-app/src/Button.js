@@ -3,7 +3,9 @@ import React from 'react';
 
 function Button(props) {
 	return (
-		<button className="button" onClick={props.onClick}> {props.title} </button>
+		<section className="button-container">
+			<button className="button" onClick={props.onClick}> {props.title} </button>
+		</section>
 	);
 }
 

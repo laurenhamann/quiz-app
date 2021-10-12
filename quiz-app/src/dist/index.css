@@ -1,0 +1,270 @@
+body {
+  text-align: center;
+  background-image: linear-gradient(to bottom right, #4C6CCD, #F83DB1);
+  height: 100vh;
+}
+
+#root {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.scrollBody {
+  flex-direction: column !important;
+  justify-content: flex-start !important;
+  overflow: scroll !important;
+}
+
+header {
+  flex: 0 0 auto;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+  height: 100vh;
+  width: 100vw !important;
+}
+header h1 {
+  margin-left: auto;
+  margin-right: auto;
+  width: 50vw;
+  color: #F2F8F5;
+  text-shadow: 2px 2px 2px #00000030;
+  font-size: 3em;
+}
+header .button {
+  background-color: #F2F8F5;
+  color: #A763D1;
+}
+
+.header-results {
+  height: 30vh;
+}
+
+aside {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100vw;
+  height: 20vh;
+  position: fixed;
+  left: 0px;
+  top: 40%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+aside #left,
+aside #right {
+  font-size: 45px;
+  background-color: transparent;
+  color: #F2F8F5;
+  width: auto;
+  height: auto;
+  margin: auto 10px;
+  margin-right: 10px;
+  display: inline-block;
+  outline: none;
+  border: none;
+}
+
+.hide {
+  visibility: hidden;
+}
+
+div {
+  height: 100vh;
+  width: 100vw;
+  flex: 0 0 auto;
+}
+
+.question-div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+
+.question h2 {
+  color: #F2F8F5;
+  font-size: 2em;
+  text-shadow: 2px 2px 2px #00000060;
+}
+
+.answers {
+  display: flex;
+  flex-direction: column;
+}
+.answers button {
+  z-index: 4;
+  margin: 10px;
+  border-radius: 10px;
+  background-color: #F2F8F5;
+  outline: none;
+  border: none;
+  color: #0E8AA4;
+  width: 50vw;
+  box-shadow: 2px 2px 2px #00000060;
+  transition: border 0.4s, box-shadow 0.4s;
+  font-size: 1.5em;
+}
+.answers button:hover {
+  box-shadow: 2px 4px 4px #00000080;
+  color: #F83DB1;
+  cursor: pointer;
+}
+.answers .selected {
+  box-shadow: 2px 4px 4px #00000080;
+  border: 3px solid #F83DB1;
+}
+
+.results {
+  margin: 0 auto;
+  text-align: center;
+}
+.results h1 {
+  color: #F83DB1;
+  text-shadow: 2px 2px 2px #00000030;
+}
+.results h3 {
+  color: #eee;
+  text-align: left;
+  text-shadow: 2px 2px 2px #00000030;
+}
+.results ul li {
+  color: #ffffff;
+  text-align: left;
+  margin-bottom: 15px;
+  list-style: none;
+}
+
+.button-container {
+  position: absolute;
+  bottom: 15px;
+  height: 8vh;
+  width: 100vw;
+}
+
+.button, .start-button {
+  position: absolute;
+  bottom: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  left: 0;
+  right: 0;
+  text-align: center;
+  border-radius: 10px;
+  background-color: #F2F8F5;
+  outline: none;
+  border: none;
+  color: #0E8AA4;
+  width: 20vw;
+  height: 5vh;
+  box-shadow: 2px 2px 2px #00000060;
+  transition: box-shadow 0.4s;
+  font-size: 1.5em;
+}
+.button:hover, .start-button:hover {
+  box-shadow: 2px 4px 4px #00000080;
+  color: #F83DB1;
+  cursor: pointer;
+}
+
+.clicked {
+  display: none;
+}
+
+@media (min-width: 600px) {
+  header h1 {
+    font-size: 5em;
+  }
+  header .button {
+    height: 10vh;
+    font-size: 2em;
+  }
+
+  aside #left,
+aside #right {
+    font-size: 4em;
+  }
+
+  .question h2 {
+    font-size: 3em;
+  }
+
+  .answers button {
+    width: 30vw;
+  }
+
+  .button {
+    margin-left: auto;
+    margin-right: auto;
+    height: 8vh;
+  }
+
+  .results h1 {
+    font-size: 2.5em;
+  }
+  .results p {
+    font-size: 1.3em;
+  }
+}
+@media (min-width: 900px) {
+  .answers {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .answers button {
+    width: 40vw;
+  }
+}
+@media (min-width: 1200px) {
+  header h1 {
+    font-size: 5em;
+  }
+  header .button {
+    font-size: 3em;
+  }
+
+  aside #left,
+aside #right {
+    font-size: 5em;
+  }
+
+  .question h2 {
+    font-size: 4em;
+  }
+
+  .answers {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 80vw;
+  }
+  .answers button {
+    width: 30vw;
+    height: 8vh;
+    font-size: 2em;
+  }
+
+  .button {
+    font-size: 2em;
+  }
+
+  .results {
+    width: 50vw;
+  }
+  .results h1 {
+    font-size: 3.5em;
+  }
+  .results p {
+    font-size: 2.3em;
+    padding-bottom: 20%;
+  }
+}
